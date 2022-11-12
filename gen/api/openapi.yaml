@@ -1,0 +1,533 @@
+openapi: 3.0.3
+info:
+  description: API for the gateway service of Chatty Car, the ride sharing app.
+  title: Prout Car Ride Sharing Service Gateway API
+  version: 1.0.0
+servers:
+- description: trip server
+  url: http://localhost:9006
+paths:
+  /trips:
+    get:
+      description: Limits list to 20 trips, ordered by latest created if not otherwise
+        specified. Always filters out trips without any available seating left. Departure
+        date query will filter only trips departing on the same date. Origin query
+        (lat+lon) will order by distance with specified origin position. Destination
+        query (lat+lon) will order by distance with specified destination position.
+        Both origin and destination queries will order by sum of distances.
+      parameters:
+      - description: Date of departure
+        explode: true
+        in: query
+        name: departure_date
+        required: false
+        schema:
+          example: 2022-10-24
+          type: string
+        style: form
+      - description: Latitude of the origin position
+        explode: true
+        in: query
+        name: originLat
+        required: false
+        schema:
+          example: 50.849372
+          type: number
+        style: form
+      - description: Longitude of the starting position
+        explode: true
+        in: query
+        name: originLon
+        required: true
+        schema:
+          example: 4.451009
+          type: number
+        style: form
+      - description: Latitude of the destination position
+        explode: true
+        in: query
+        name: destinationLat
+        required: false
+        schema:
+          example: 50.849372
+          type: number
+        style: form
+      - description: Longitude of the destination position
+        explode: true
+        in: query
+        name: destinationLon
+        required: false
+        schema:
+          example: 4.451009
+          type: number
+        style: form
+      responses:
+        "400":
+          description: Both latitude and longitude should be specified for a position
+            query
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/trip'
+                maxItems: 10
+                type: array
+          description: Sent list of trips
+      summary: Get list of trips with optional search queries
+      x-accepts: application/json
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/newTrip'
+        description: Information of the trip
+      responses:
+        "400":
+          description: Trip in request is not correct
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trip'
+          description: Trip is created, sent trip created with its assigned ID
+      security:
+      - authentication:
+        - any_user
+      summary: Create a trip
+      x-contentType: application/json
+      x-accepts: application/json
+  /trips/{id}:
+    delete:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      responses:
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "404":
+          description: No trip found with this ID
+        "201":
+          description: Trip is deleted
+      security:
+      - authentication:
+        - driver
+      summary: Delete trip
+      x-accepts: application/json
+    get:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      responses:
+        "404":
+          description: No trip found with this ID
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/trip'
+          description: Sent trip information
+      summary: Get trip information
+      x-accepts: application/json
+  /trips/{id}/passengers:
+    get:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      responses:
+        "400":
+          description: Status not in accepted values
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "404":
+          description: No trip found with this ID
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/passengers'
+          description: Sent list of passengers
+      security:
+      - authentication:
+        - driver
+      summary: Get list of passengers of a trip, with pending, accepted and refused
+        status
+      x-accepts: application/json
+  /trips/{trip_id}/passengers/{user_id}:
+    delete:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: trip_id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      - description: ID of the user
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 12
+          type: integer
+        style: simple
+      responses:
+        "400":
+          description: User is not a passenger
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "404":
+          description: Trip or user not found
+        "200":
+          description: Used removed from passenger
+      security:
+      - authentication:
+        - passenger
+      summary: Remove user from passengers of a trip
+      x-accepts: application/json
+    get:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: trip_id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      - description: ID of the user
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 12
+          type: integer
+        style: simple
+      responses:
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "404":
+          description: Trip or user not found
+        "200":
+          content:
+            text/plain:
+              schema:
+                enum:
+                - pending
+                - accepted
+                - refused
+                type: string
+          description: Sent passenger status
+      security:
+      - authentication:
+        - driver
+        - passenger
+      summary: Get passenger status
+      x-accepts: text/plain
+    post:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: trip_id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      - description: ID of the user
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 12
+          type: integer
+        style: simple
+      responses:
+        "400":
+          description: User is already a passenger, or the ride has no available seating
+            left
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "404":
+          description: Trip or user not found
+        "201":
+          description: User added as pending passenger
+      security:
+      - authentication:
+        - passenger
+      summary: Add user as passenger to a trip with pending status
+      x-accepts: application/json
+    put:
+      parameters:
+      - description: ID of the trip
+        explode: false
+        in: path
+        name: trip_id
+        required: true
+        schema:
+          example: 38
+          type: integer
+        style: simple
+      - description: ID of the user
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          example: 12
+          type: integer
+        style: simple
+      - description: New status of the passenger
+        explode: true
+        in: query
+        name: status
+        required: true
+        schema:
+          enum:
+          - accepted
+          - refused
+          type: string
+        style: form
+      responses:
+        "400":
+          description: User is not a passenger, or is not in pending status, or status
+            not in accepted value
+        "401":
+          description: Missing authentification
+        "403":
+          description: Not identified as the corresponding user
+        "404":
+          description: Trip or user not found
+        "200":
+          description: Status is updated
+      security:
+      - authentication:
+        - driver
+      summary: Update passenger status
+      x-accepts: application/json
+components:
+  schemas:
+    position:
+      example:
+        latitude: 50.849372
+        longitude: 4.451009
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      type: object
+    newTrip:
+      example:
+        origin:
+          latitude: 50.849372
+          longitude: 4.451009
+        destination:
+          latitude: 50.849372
+          longitude: 4.451009
+        departure: 2022-10-24
+        driver_id: 12
+        available_seating: 2
+      properties:
+        origin:
+          $ref: '#/components/schemas/position'
+        destination:
+          $ref: '#/components/schemas/position'
+        departure_date:
+          description: Date in ISO 8601, YYYY-MM-DD
+          type: string
+        driver_id:
+          type: integer
+        available_seating:
+          type: integer
+      type: object
+    trip:
+      example:
+        id: 38
+        origin:
+          latitude: 50.849372
+          longitude: 4.451009
+        destination:
+          latitude: 50.849372
+          longitude: 4.451009
+        departure: 2022-10-24 10:45:00
+        driver_id: 12
+        available_seating: 2
+      properties:
+        id:
+          type: integer
+        origin:
+          $ref: '#/components/schemas/position'
+        destination:
+          $ref: '#/components/schemas/position'
+        departure:
+          description: Date in ISO 8601, YYYY-MM-DD
+          type: string
+        driver_id:
+          type: integer
+        available_seating:
+          type: integer
+      type: object
+    passengers:
+      example:
+        refused:
+        - id: 1
+          email: gregory.seront@vinci.be
+          firstname: Gregory
+          lastname: Seront
+        - id: 1
+          email: gregory.seront@vinci.be
+          firstname: Gregory
+          lastname: Seront
+        pending:
+        - id: 1
+          email: gregory.seront@vinci.be
+          firstname: Gregory
+          lastname: Seront
+        - id: 1
+          email: gregory.seront@vinci.be
+          firstname: Gregory
+          lastname: Seront
+        accepted:
+        - id: 1
+          email: gregory.seront@vinci.be
+          firstname: Gregory
+          lastname: Seront
+        - id: 1
+          email: gregory.seront@vinci.be
+          firstname: Gregory
+          lastname: Seront
+      properties:
+        pending:
+          items:
+            $ref: '#/components/schemas/user'
+          type: array
+        accepted:
+          items:
+            $ref: '#/components/schemas/user'
+          type: array
+        refused:
+          items:
+            $ref: '#/components/schemas/user'
+          type: array
+      type: object
+    passenger_trips:
+      properties:
+        pending:
+          items:
+            $ref: '#/components/schemas/trip'
+          type: array
+        accepted:
+          items:
+            $ref: '#/components/schemas/trip'
+          type: array
+        refused:
+          items:
+            $ref: '#/components/schemas/trip'
+          type: array
+      type: object
+    newUser:
+      example:
+        email: gregory.seront@vinci.be
+        firstname: Gregory
+        lastname: Seront
+        password: password123
+      properties:
+        email:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        password:
+          type: string
+      type: object
+    user:
+      example:
+        id: 1
+        email: gregory.seront@vinci.be
+        firstname: Gregory
+        lastname: Seront
+      properties:
+        id:
+          type: integer
+        email:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+      type: object
+    credentials:
+      example:
+        email: gregory.seront@vinci.be
+        password: password123
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      type: object
+    notification:
+      example:
+        trip_id: 45
+        date: 2022-10-24
+        notification_text: Votre demande de voyage a été acceptée
+      properties:
+        trip_id:
+          type: integer
+        date:
+          description: Date in ISO 8601, YYYY-MM-DD
+          type: string
+        notification_text:
+          type: string
+      type: object
+  securitySchemes:
+    authentication:
+      bearerFormat: JWT
+      scheme: bearer
+      type: http
+
