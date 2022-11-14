@@ -1,3 +1,5 @@
+# delete all trips where user is driver when he deletes his account
+# get trips where the user is driver
 openapi: 3.0.3
 info:
   title: Chatty Car Ride Sharing Service Trip API
