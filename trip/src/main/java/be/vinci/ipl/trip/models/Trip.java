@@ -1,6 +1,6 @@
 package be.vinci.ipl.trip.models;
 
-import java.util.Date;
+import java.time.LocalDate;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 
 @Getter
 @Setter
@@ -33,7 +35,8 @@ public class Trip {
       @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude")),
   })
   private Position destination;
-  private Date departureDate;
+  @DateTimeFormat(iso = ISO.DATE)
+  private LocalDate departureDate;
   private int idDriver;
   private int availableSeating;
 
