@@ -129,7 +129,7 @@ paths:
         201:
           description: Trip is deleted
 
-  /trip/{user_id}:
+  /trip/{user_id}?role=:
     get:
       parameters:
         - name: user_id
@@ -139,7 +139,7 @@ paths:
             type: integer
             example: 13432
           description: user's id 
-        - name: status
+        - name: role
           in: query
           required: false
           schema:
@@ -150,6 +150,19 @@ paths:
         200:
           description: Get list of futur trips where the user is passenger, driver or both 
             if status parameter is not specified.
+    delete:
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: integer
+          example: 123456
+        description: user's id
+      responses:
+        200:
+          description: Remove all trips where the user is driver
+
 
 components:
   securitySchemes:
