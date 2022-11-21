@@ -11,9 +11,3 @@ public class TripApplication {
   }
 
 }
-
-/*
- * @embeded pour le trip
- * @embedable pour la position
- * type LocalDate pour les dates
- * */

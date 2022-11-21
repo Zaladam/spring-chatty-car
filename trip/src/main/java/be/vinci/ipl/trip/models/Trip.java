@@ -22,6 +22,7 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 public class Trip {
 
   @Id
+  @Column(name = "trip_id")
   private int tripId;
   @Embedded
   @AttributeOverrides({
@@ -35,9 +36,12 @@ public class Trip {
       @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude")),
   })
   private Position destination;
+  @Column(name = "departure_date")
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate departureDate;
+  @Column(name = "driver_id")
   private int idDriver;
+  @Column(name = "available_seating")
   private int availableSeating;
 
 }
