@@ -1,4 +1,4 @@
-package be.vinci.be.notification;
+package be.vinci.ipl.ipl.notification;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
