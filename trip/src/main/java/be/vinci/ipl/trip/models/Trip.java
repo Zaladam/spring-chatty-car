@@ -6,6 +6,8 @@ import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,8 +23,11 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 @Entity(name = "trips")
 public class Trip {
 
+  // Todo Specify json notation
+
   @Id
   @Column(name = "trip_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int tripId;
   @Embedded
   @AttributeOverrides({
@@ -40,7 +45,7 @@ public class Trip {
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate departureDate;
   @Column(name = "driver_id")
-  private int idDriver;
+  private int driverId;
   @Column(name = "available_seating")
   private int availableSeating;
 

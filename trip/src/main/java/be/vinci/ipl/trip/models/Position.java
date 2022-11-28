@@ -19,4 +19,13 @@ public class Position {
   private long longitude;
   private long latitude;
 
+  public Position(long latitude, long longitude){
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
+
+ public double calculeDistance(Position destination){
+    return 0;
+ }
+
 }

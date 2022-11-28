@@ -60,7 +60,7 @@ paths:
           description: Latitude of the origin position
         - name: originLon
           in: query
-          required: true
+          required: false
           schema:
             type: number
             example: 4.451009
@@ -152,21 +152,6 @@ paths:
       responses:
         200:
           description: Remove all trips where the user is driver
-
-  /trip/{user_id}/passenger:
-    get:
-      parameters:
-        - name: user_id
-          in: path
-          required: true
-          schema:
-            type: integer
-            example: 13432
-          description: user's id
-      responses:
-        200:
-          description: Get list of futur trips where the user is passenger
-
 
 components:
   securitySchemes:
