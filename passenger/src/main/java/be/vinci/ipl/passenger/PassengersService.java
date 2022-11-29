@@ -27,6 +27,8 @@ public class PassengersService {
 
   public Passengers findPassengersFromTrip(long id) {
     Iterable<Passenger> passengers = repository.findByTripId(id);
+    if(passengers == null)
+      return null;
     Passengers result = new Passengers();
 
     for(Passenger passenger : passengers) {
@@ -40,13 +42,18 @@ public class PassengersService {
     return result;
   }
 
-  public void deleteAllPassengersFromTrip(long id) {
+  public boolean deleteAllPassengersFromTrip(long id) {
     Iterable<Passenger> passengers = repository.findByTripId(id);
+    if(passengers == null)
+      return false;
     repository.deleteAll(passengers);
+    return true;
   }
 
   public Trips readTripByPassengerId(long id) {
     Iterable<Passenger> passengers = repository.findByUserId(id);
+    if (passengers == null)
+      return null;
     Trips result = new Trips();
     for (Passenger passenger : passengers ) {
       Trip trip = tripProxy.readOne(passenger.getTripId());
@@ -59,18 +66,25 @@ public class PassengersService {
     return result;
   }
 
-  public void deletePassengersFromTrip(long id) {
+  public boolean deletePassengersFromTrip(long id) {
     Iterable<Passenger> passengers = repository.findByUserId(id);
+    if(passengers == null)
+      return false;
     repository.deleteAll(passengers);
+    return true;
   }
 
-  public void addPassengerToTrip(long userId, long tripId) {
+  public boolean addPassengerToTrip(long userId, long tripId) {
     Passenger newPassenger = new Passenger();
+    Passenger verification = repository.findByTripIdAndUserId(userId,tripId);
+    if(verification==null)
+      return false;
     newPassenger.setStatus("pending");
     newPassenger.setTripId((int) tripId);
     newPassenger.setUserId((int) userId);
 
     repository.save(newPassenger);
+    return true;
   }
 
   public String readStatusFromPassenger(long userId, long tripId) {
@@ -78,15 +92,21 @@ public class PassengersService {
     return repository.findByTripIdAndUserId(userId,tripId).getStatus();
   }
 
-  public void updatePassengerStatus(long tripId, long userId, String status) {
+  public boolean updatePassengerStatus(long tripId, long userId, String status) {
 
     Passenger passenger = repository.findByTripIdAndUserId(tripId,userId);
+    if(passenger == null)
+      return false;
     passenger.setStatus(status);
     repository.save(passenger);
+    return true;
   }
 
-  public void deletePassengerFromTrip(long tripId, long userId) {
+  public boolean deletePassengerFromTrip(long tripId, long userId) {
     Passenger passenger = repository.findByTripIdAndUserId(tripId,userId);
+    if(passenger == null)
+      return false;
     repository.delete(passenger);
+    return true;
   }
 }
