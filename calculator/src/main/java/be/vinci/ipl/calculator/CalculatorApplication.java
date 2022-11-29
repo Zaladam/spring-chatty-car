@@ -1,4 +1,4 @@
-package be.vinci.ipl.passenger;
+package be.vinci.ipl.calculator;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,10 +6,10 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-public class PassengerApplication {
+public class CalculatorApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PassengerApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(CalculatorApplication.class, args);
+  }
 
 }

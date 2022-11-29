@@ -41,12 +41,12 @@ public class TripController {
     List<Trip> trips;
     if (originLat != 0 && originLon != 0 && destinationLat != 0 && destinationLon != 0) {
       trips = service.getAllTripsSameOriginAndSameDestination(origin, destination);
-      trips = trips.stream().sorted((x,y)->{
-        double xDistance =x.getOrigin().calculeDistance(x.getDestination());
-        double yDistance = y.getOrigin().calculeDistance(y.getDestination());
-            return Double.compare(xDistance, yDistance);
-          })
-          .toList();
+//      trips = trips.stream().sorted((x,y)->{
+//        double xDistance =x.getOrigin().calculeDistance(x.getDestination());
+//        double yDistance = y.getOrigin().calculeDistance(y.getDestination());
+//            return Double.compare(xDistance, yDistance);
+//          })
+//          .toList();
     } else if (departureDate != null) {
       trips = service.getAllTripsSameDepartureDate(departureDate);
     } else {

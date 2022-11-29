@@ -3,6 +3,29 @@
   <component name="CompilerConfiguration">
     <annotationProcessing>
       <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="calculator" />
+        <module name="trip" />
+        <module name="eurekaServer" />
+        <module name="passenger" />
+      </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="calculator" target="17" />
+      <module name="eurekaServer" target="17" />
+      <module name="passenger" target="17" />
+      <module name="trip" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="calculator" options="-parameters" />
+      <module name="eurekaServer" options="-parameters" />
+      <module name="passenger" options="-parameters" />
+      <module name="trip" options="-parameters" />
+    </option>
   </component>
 </project>
