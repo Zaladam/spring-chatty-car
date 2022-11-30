@@ -7,19 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "users")
-public class NewUser {
-  @Id
+public class Credentials {
   private String email;
-  private String firstName;
-  private String lastName;
   private String password;
-
-  public User toUser(){return new User(0,email,firstName,lastName);}
-  public User toUser(int id){return new User(id,email,firstName,lastName);}
 }

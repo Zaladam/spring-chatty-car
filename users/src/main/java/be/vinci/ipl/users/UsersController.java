@@ -4,9 +4,11 @@ import be.vinci.ipl.users.model.NewUser;
 import be.vinci.ipl.users.model.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,11 +27,7 @@ public class UsersController {
         newUser.getFirstName() == null || newUser.getLastName() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
-    User user = new User();
-    user.setEmail(newUser.getEmail());
-    user.setFirstName(newUser.getFirstName());
-    user.setLastName(newUser.getLastName());
-    boolean created = service.createOne(user);
+    boolean created = service.createOne(newUser);
     if (!created) throw new ResponseStatusException(HttpStatus.CONFLICT);
     return new ResponseEntity<>(HttpStatus.CREATED);
   }
@@ -39,6 +37,33 @@ public class UsersController {
     User user = service.findByEmail(email);
     if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     return user;
+  }
+
+  @GetMapping("/users/{id}")
+  public User readOneById(@PathVariable int id) {
+    User user = service.findById("id");
+    if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    return user;
+  }
+
+  @PutMapping("/users/{id}")
+  public ResponseEntity<Void> updateOne(@PathVariable int id,@RequestBody User user){
+    if (user.getEmail() == null  || user.getFirstName() == null || user.getLastName() == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+    boolean updated = service.updateOne(user);
+    if(!updated) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
+  @DeleteMapping("/users/{id}")
+  public ResponseEntity<Void> deleteOne(@PathVariable int id,@RequestBody User user){
+    if (user.getEmail() == null  || user.getFirstName() == null || user.getLastName() == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+    boolean deleted = service.deleteOne(user.getId());
+    if(!deleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
 

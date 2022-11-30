@@ -61,8 +61,6 @@ paths:
         - authentication:
             - any_user
       responses:
-        401:
-          description: Missing authentification
         404:
           description: No user found with this ID
         200:
@@ -85,10 +83,6 @@ paths:
       responses:
         400:
           description: User in request is not correct
-        401:
-          description: Missing authentification
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No user found with this ID
         200:
@@ -99,10 +93,6 @@ paths:
         - authentication:
             - specific_user
       responses:
-        401:
-          description: Missing authentification
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No user found with this ID
         200:
