@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/calculator")
 public class CalculatorController {
 
-  private CalculatorService service = new CalculatorService();
+  private final CalculatorService service = new CalculatorService();
 
 
   /**

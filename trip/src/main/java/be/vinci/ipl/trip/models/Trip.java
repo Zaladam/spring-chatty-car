@@ -1,5 +1,6 @@
 package be.vinci.ipl.trip.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDate;
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -27,6 +28,7 @@ public class Trip {
 
   @Id
   @Column(name = "trip_id")
+  @JsonProperty("trip_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int tripId;
   @Embedded
