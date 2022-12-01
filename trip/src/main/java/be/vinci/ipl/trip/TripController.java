@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class TripController {
 
   private final TripService service;
+  private final CalculatorProxy calculatorProxy;
 
-  public TripController(TripService service) {
+  public TripController(TripService service, CalculatorProxy calculatorProxy) {
     this.service = service;
+    this.calculatorProxy = calculatorProxy;
   }
 
 
