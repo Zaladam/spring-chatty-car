@@ -20,8 +20,6 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
   private String email;
-  @Column(name = "first_name")
-  private String firstName;
-  @Column(name = "last_name")
-  private String lastName;
+  private String firstname;
+  private String lastname;
 }

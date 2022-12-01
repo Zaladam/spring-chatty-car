@@ -35,8 +35,8 @@ public class UsersService {
       return false;
     }
     userFounded.setEmail(user.getEmail());
-    userFounded.setFirstName(user.getFirstName());
-    userFounded.setLastName(user.getLastName());
+    userFounded.setFirstname(user.getFirstname());
+    userFounded.setLastname(user.getLastname());
     repository.save(userFounded);
     return true;
   }
