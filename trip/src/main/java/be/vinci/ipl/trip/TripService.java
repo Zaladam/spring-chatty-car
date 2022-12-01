@@ -46,4 +46,8 @@ public class TripService {
   public List<Trip> getListOfTripUserIsDriver(int userId) {
     return repository.findAllByDriverId(userId);
   }
+
+  public boolean deleteTripsByDriverId(int driverId) {
+    return repository.deleteAllByDriverId(driverId);
+  }
 }

@@ -69,8 +69,13 @@ public class TripController {
  }
 
  @GetMapping("/{driverId}/driver")
-  public List<Trip> getListOfTripUserIsDriver(@PathVariable int driverId){
+  public List<Trip> getListOfTripOfDriver(@PathVariable int driverId){
     return service.getListOfTripUserIsDriver(driverId);
+ }
+
+ @DeleteMapping("/{driverId}/driver")
+  public boolean deleteTripsByDriverId(@PathVariable int driverId){
+    return service.deleteTripsByDriverId(driverId);
  }
 
 }
