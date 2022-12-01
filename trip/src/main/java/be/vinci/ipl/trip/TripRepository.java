@@ -29,4 +29,6 @@ public interface TripRepository extends CrudRepository<Trip, Integer> {
 
   List<Trip> findAllByOriginAndDestination(Position origin, Position destination);
 
+ List<Trip> findAllByDriverId(int driverId);
+
 }

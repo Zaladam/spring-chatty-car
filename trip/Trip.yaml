@@ -127,28 +127,28 @@ paths:
         201:
           description: Trip is deleted
 
-  /trip/{user_id}/driver:
+  /trip/{driverId}/driver:
     get:
       parameters:
-        - name: user_id
+        - name: driverId
           in: path
           required: true
           schema:
             type: integer
             example: 13432
-          description: user's id
+          description: driver's id
       responses:
         200:
           description: Get list of futur trips where the user is driver
     delete:
       parameters:
-        - name: user_id
+        - name: driverId
           in: path
           required: true
           schema:
             type: integer
             example: 123456
-          description: user's id
+          description: driver's id
       responses:
         200:
           description: Remove all trips where the user is driver

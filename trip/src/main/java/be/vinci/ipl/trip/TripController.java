@@ -6,6 +6,7 @@ import be.vinci.ipl.trip.models.Trip;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ws.rs.QueryParam;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,16 @@ public class TripController {
  @GetMapping("/{id}")
  public Trip getTripById(@PathVariable int id){
     return service.getTripById(id);
+ }
+
+ @DeleteMapping("/{id}")
+  public boolean deleteTripById(@PathVariable int id){
+    return service.deleteTripById(id);
+ }
+
+ @GetMapping("/{driverId}/driver")
+  public List<Trip> getListOfTripUserIsDriver(@PathVariable int driverId){
+    return service.getListOfTripUserIsDriver(driverId);
  }
 
 }

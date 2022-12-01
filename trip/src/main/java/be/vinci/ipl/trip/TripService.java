@@ -38,4 +38,12 @@ public class TripService {
   public Trip getTripById(int id) {
     return repository.findByTripId(id);
   }
+
+  public boolean deleteTripById(int id) {
+    return repository.deleteByTripId(id);
+  }
+
+  public List<Trip> getListOfTripUserIsDriver(int userId) {
+    return repository.findAllByDriverId(userId);
+  }
 }
