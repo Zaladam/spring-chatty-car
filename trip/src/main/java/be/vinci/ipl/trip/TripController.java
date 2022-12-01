@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.List;
 import javax.ws.rs.QueryParam;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,5 +56,10 @@ public class TripController {
   public Trip createTrip(@RequestBody NoIdTrip trip) {
     return service.createTrip(trip.toTrip());
   }
+
+ @GetMapping("/{id}")
+ public Trip getTripById(@PathVariable int id){
+    return service.getTripById(id);
+ }
 
 }

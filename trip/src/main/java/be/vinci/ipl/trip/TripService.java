@@ -34,4 +34,8 @@ public class TripService {
   public List<Trip> getAllTripsSameDepartureDate(LocalDate departureDate) {
     return repository.findAllByDepartureDate(departureDate);
   }
+
+  public Trip getTripById(int id) {
+    return repository.findByTripId(id);
+  }
 }
