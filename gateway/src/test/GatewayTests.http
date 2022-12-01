@@ -1,0 +1,8 @@
+###Connect user
+POST http://localhost:8080/auth
+Content-Type: application/json
+
+{
+  "email" : "string",
+  "password": "string"
+}

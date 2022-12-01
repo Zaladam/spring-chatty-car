@@ -30,8 +30,8 @@ public void createUser(NewUser newUser){
   authentificationProxy.createCredentials(newUser.getEmail(),newUser.toCredentials());
 }
 
-public User readOneUser(String email){
-  return userProxy.readOneUserByEmail(email);
+public User readUserByEmail(String email){
+  return userProxy.readUserByEmail(email);
 }
 
 public void updateCredentials(Credentials userCrendentials){

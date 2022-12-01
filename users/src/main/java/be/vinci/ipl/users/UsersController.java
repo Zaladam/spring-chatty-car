@@ -42,17 +42,17 @@ public class UsersController {
   @GetMapping("/users/{id}")
   public User readOneById(@PathVariable int id) {
     User user = service.findById(id);
-    if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user found with this ID");
     return user;
   }
 
   @PutMapping("/users/{id}")
   public ResponseEntity<Void> updateOne(@PathVariable int id,@RequestBody User user){
     if (user.getEmail() == null  || user.getFirstName() == null || user.getLastName() == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     }
     boolean updated = service.updateOne(user);
-    if(!updated) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    if(!updated) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user found with this ID");
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

@@ -4,13 +4,10 @@ import be.vinci.ipl.authentication.model.Credentials;
 import java.util.regex.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+@RestController
 public class AuthenticationController {
 
   private final AuthenticationService service;
@@ -24,11 +21,11 @@ public class AuthenticationController {
     if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
         .matcher(credentials.getEmail()).matches()
         || credentials.getPassword()==null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Credentials in request are not correct");
     }
     String token = service.connect(credentials);
     if (token == null) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong username or password");
     }
     return token;
   }
@@ -37,7 +34,7 @@ public class AuthenticationController {
   public String verify(@RequestBody String token) {
     String email = service.verify(token);
     if (email == null) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing authentification");
     }
     return email;
   }
@@ -63,11 +60,11 @@ public class AuthenticationController {
     if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
         .matcher(credentials.getEmail()).matches()
         || credentials.getPassword()==null || !email.equals(credentials.getEmail())) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Credentials in request are not correct");
     }
     boolean updated = service.updateCredentials(credentials);
     if (!updated) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user found with this email");
     }
     return new ResponseEntity<>(HttpStatus.OK);
   }

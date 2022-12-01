@@ -6,8 +6,9 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.mindrot.jbcrypt.BCrypt;
+import org.springframework.stereotype.Service;
 
-
+@Service
 public class AuthenticationService {
 
   private final AuthenticationRepository repository;

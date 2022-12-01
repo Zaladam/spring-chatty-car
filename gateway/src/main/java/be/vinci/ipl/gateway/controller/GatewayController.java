@@ -4,6 +4,7 @@ import be.vinci.ipl.gateway.models.Credentials;
 import be.vinci.ipl.gateway.models.NewUser;
 import be.vinci.ipl.gateway.models.User;
 import be.vinci.ipl.gateway.service.GatewayService;
+import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,37 +30,48 @@ public class GatewayController {
   }
 
   @PostMapping("/auth")
-   String connect(@RequestBody Credentials credentials){
+  String connect(@RequestBody Credentials credentials) {
     return gatewayService.connect(credentials);
   }
 
-@PostMapping("/users") //BadRequest & UNauth.
-ResponseEntity<Void> createUser(@RequestBody NewUser newUser){
+  @PostMapping("/users")
+  ResponseEntity<Void> createUser(@RequestBody NewUser newUser) {
     gatewayService.createUser(newUser);
     return new ResponseEntity<>(HttpStatus.CREATED);
-}
+  }
 
-@GetMapping("/users") //a verifier
-  User readOneUser(@QueryParam("email") String email){
-    if(email==null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    return gatewayService.readOneUser(email);
-}
+  @GetMapping("/users") //a verifier
+  @ResponseBody
+  User readUserByEmail(@RequestParam(required = true) String email) {
+    return gatewayService.readUserByEmail(email);
+  }
 
-@PutMapping("/users")
-  void updatePasswordUser(@RequestBody Credentials credentials, @RequestHeader("Authorization") String token ){
-    String user= gatewayService.verify(token);
-    if(!user.equals(credentials.getEmail())) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-
+  @PutMapping("/users")
+  void updatePasswordUser(@RequestBody Credentials credentials,
+      @RequestHeader("Authorization") String token) {
+    String userEmail = gatewayService.verify(token);
+    if (!userEmail.equals(credentials.getEmail())) {
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,
+          "Not identified as the corresponding user");
+    }
     gatewayService.updateCredentials(credentials);
-}
+  }
 
-@GetMapping("/users/{id}")
-  User readUserById(@PathVariable int id, @RequestHeader("Authorization") String token){
-  String userEmail = gatewayService.verify(token);
-  if (!userEmail.equals(userEmail)) throw new ResponseStatusException(HttpStatus.FORBIDDEN);
-  return gatewayService.readUserById(id);
-}
+  @GetMapping("/users/{id}")
+  User readUserById(@PathVariable int id, @RequestHeader("Authorization") String token) {
+    gatewayService.verify(token);
+    return gatewayService.readUserById(id);
+  }
 
+  @PutMapping("/users/{id}")
+  void updateUser(@PathVariable int id, @RequestBody User user,@RequestHeader("Authorization") String token ){
+    if(user.getIdUser()!=id)
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
+    String userEmail = gatewayService.verify(token);
+    if(readUserByEmail(userEmail).getIdUser()!=id)
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");
+    gatewayService.updateUser(id,user);
+  }
 
 
 
