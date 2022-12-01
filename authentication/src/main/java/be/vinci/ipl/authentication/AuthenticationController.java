@@ -18,8 +18,8 @@ public class AuthenticationController {
 
   @PostMapping("/auth/connect")
   public String connect(@RequestBody Credentials credentials) {
-    if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
-        .matcher(credentials.getEmail()).matches()
+
+    if (credentials.getEmail()==null
         || credentials.getPassword()==null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Credentials in request are not correct");
     }
@@ -34,7 +34,7 @@ public class AuthenticationController {
   public String verify(@RequestBody String token) {
     String email = service.verify(token);
     if (email == null) {
-      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing authentification");
+      throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
     return email;
   }
@@ -42,8 +42,7 @@ public class AuthenticationController {
   @PostMapping("/auth/{email}")
   public ResponseEntity<Void> createCredentials(@PathVariable String email,
       @RequestBody Credentials credentials) {
-    if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
-        .matcher(credentials.getEmail()).matches()
+    if (credentials.getEmail()==null
         || credentials.getPassword()==null || !email.equals(credentials.getEmail())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
