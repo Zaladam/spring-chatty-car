@@ -41,7 +41,7 @@ public class UsersController {
 
   @GetMapping("/users/{id}")
   public User readOneById(@PathVariable int id) {
-    User user = service.findById("id");
+    User user = service.findById(id);
     if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     return user;
   }

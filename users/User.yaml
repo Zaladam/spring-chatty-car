@@ -131,13 +131,3 @@ components:
         firstname: Gregory
         lastname: Seafront
         password: password123
-    credentials:
-      type: object
-      properties:
-        email:
-          type: string
-        password:
-          type: string
-        example:
-          email: gregory.seront@vinci.be
-          password: password123
