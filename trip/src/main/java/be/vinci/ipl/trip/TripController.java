@@ -31,7 +31,7 @@ public class TripController {
    **/
 //  @GetMapping("/?departure_date&originLat&originLon&destinationLat&destinationLon")
   @GetMapping("/")
-  public List<Trip> GetListofTrips(@QueryParam("departure_date") String departure_date,
+  public List<Trip> getListOfTrips(@QueryParam("departure_date") String departure_date,
       @QueryParam("originLat") Long originLat, @QueryParam("originLon") Long originLon,
       @QueryParam("destinationLat") Long destinationLat,
       @QueryParam("destinationLon") Long destinationLon) {
