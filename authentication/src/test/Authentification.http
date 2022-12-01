@@ -3,6 +3,6 @@ POST http://localhost:9004/auth/connect
 Content-Type: application/json
 
 {
-  "email" : "string",
+  "email" : "cha@gmail.com",
   "password": "string"
 }

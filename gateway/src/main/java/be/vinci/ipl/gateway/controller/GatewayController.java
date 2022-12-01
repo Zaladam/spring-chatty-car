@@ -2,12 +2,14 @@ package be.vinci.ipl.gateway.controller;
 
 import be.vinci.ipl.gateway.models.Credentials;
 import be.vinci.ipl.gateway.models.NewUser;
+import be.vinci.ipl.gateway.models.Notification;
 import be.vinci.ipl.gateway.models.User;
 import be.vinci.ipl.gateway.service.GatewayService;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -68,10 +70,36 @@ public class GatewayController {
     if(user.getIdUser()!=id)
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     String userEmail = gatewayService.verify(token);
-    if(readUserByEmail(userEmail).getIdUser()!=id)
+    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=id)
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");
     gatewayService.updateUser(id,user);
   }
+
+  //user/{id}/driver
+
+  ///user/{id}/passenger
+
+  @GetMapping("/user/{id}/notifications")
+  Iterable<Notification> readAllNotificationsOfAUser(@PathVariable int idUser, @RequestHeader("Authorization") String token){
+
+    gatewayService.readUserById(idUser);//404 notfound!!
+    String userEmail = gatewayService.verify(token);//401
+    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=idUser)
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");//403
+    return gatewayService.readAllNotificationsOfAUser(idUser);
+  }
+
+  @DeleteMapping("/user/{id}/notifications")
+  void deleteAllNotificationsOfAUser(@PathVariable int idUser,  @RequestHeader("Authorization") String token){
+    gatewayService.readUserById(idUser);//404 notfound!!
+    String userEmail = gatewayService.verify(token);//401
+    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=idUser)
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");//403
+
+    gatewayService.deleteAllNotificationsOfAUser(idUser);
+
+  }
+
 
 
 

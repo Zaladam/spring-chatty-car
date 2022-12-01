@@ -1,9 +1,11 @@
 package be.vinci.ipl.gateway.service;
 
 import be.vinci.ipl.gateway.data.AuthentificationProxy;
+import be.vinci.ipl.gateway.data.NotificationProxy;
 import be.vinci.ipl.gateway.data.UserProxy;
 import be.vinci.ipl.gateway.models.Credentials;
 import be.vinci.ipl.gateway.models.NewUser;
+import be.vinci.ipl.gateway.models.Notification;
 import be.vinci.ipl.gateway.models.User;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +13,13 @@ import org.springframework.stereotype.Service;
 public class GatewayService {
 private final AuthentificationProxy authentificationProxy;
 private final UserProxy userProxy;
+private final NotificationProxy notificationProxy;
 
 public GatewayService(AuthentificationProxy authentificationProxy,
-    UserProxy userProxy){
+    UserProxy userProxy, NotificationProxy notificationProxy){
   this.authentificationProxy = authentificationProxy;
   this.userProxy = userProxy;
+  this.notificationProxy = notificationProxy;
 }
 public String connect(Credentials credentials){
     return authentificationProxy.connect(credentials);
@@ -44,6 +48,14 @@ public User readUserById(int id){
 
 public void updateUser(int id, User user){
   userProxy.updateOneUser(id, user);
+}
+
+public Iterable<Notification> readAllNotificationsOfAUser(int idUser){
+  return notificationProxy.readAllNotificationsOfAUser(idUser);
+}
+
+public void deleteAllNotificationsOfAUser(int idUser){
+  notificationProxy.deleteAllNotificationsOfAUser(idUser);
 }
 
 }
