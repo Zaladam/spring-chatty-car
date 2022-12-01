@@ -19,6 +19,5 @@ import lombok.ToString;
 public class Credentials {
   @Id
   private String email;
-  @Column(name = "password")
   private String password;
 }
