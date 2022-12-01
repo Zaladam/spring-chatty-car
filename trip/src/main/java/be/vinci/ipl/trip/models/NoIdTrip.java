@@ -18,4 +18,8 @@ public class NoIdTrip {
  private int driverId;
  private int availableSeating;
 
+ public Trip toTrip(){
+  return new Trip(0, origin, destination, departureDate, driverId, availableSeating);
+ }
+
 }

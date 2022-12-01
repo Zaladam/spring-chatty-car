@@ -1,5 +1,6 @@
 package be.vinci.ipl.trip;
 
+import be.vinci.ipl.trip.models.NoIdTrip;
 import be.vinci.ipl.trip.models.Position;
 import be.vinci.ipl.trip.models.Trip;
 import java.time.LocalDate;
@@ -41,12 +42,6 @@ public class TripController {
     List<Trip> trips;
     if (originLat != 0 && originLon != 0 && destinationLat != 0 && destinationLon != 0) {
       trips = service.getAllTripsSameOriginAndSameDestination(origin, destination);
-//      trips = trips.stream().sorted((x,y)->{
-//        double xDistance =x.getOrigin().calculeDistance(x.getDestination());
-//        double yDistance = y.getOrigin().calculeDistance(y.getDestination());
-//            return Double.compare(xDistance, yDistance);
-//          })
-//          .toList();
     } else if (departureDate != null) {
       trips = service.getAllTripsSameDepartureDate(departureDate);
     } else {
@@ -56,10 +51,9 @@ public class TripController {
     return trips.subList(0, 19);
   }
 
-  // Todo Create model noIdTrip because before created, there is no id
   @PostMapping("/")
-  public Trip createTrip(@RequestBody Trip trip) {
-    return service.createTrip(trip);
+  public Trip createTrip(@RequestBody NoIdTrip trip) {
+    return service.createTrip(trip.toTrip());
   }
 
 }
