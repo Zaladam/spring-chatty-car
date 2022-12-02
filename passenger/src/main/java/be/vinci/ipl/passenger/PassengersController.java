@@ -21,6 +21,12 @@ public class PassengersController {
     this.service = service;
   }
 
+
+  /**
+   * Get the passengers of a trip
+   * @param trip_id id of the trip
+   * @return ResponseEntity of a http response OK and with a Custom Object Passengers containing 3 lists of passengers by status
+   */
   @GetMapping("/passengers/{trip_id}")
   public ResponseEntity<Passengers> readFromTrip(@PathVariable long trip_id){
     Passengers passengers = service.findPassengersFromTrip(trip_id);
@@ -29,6 +35,11 @@ public class PassengersController {
     return new ResponseEntity<>(passengers,HttpStatus.OK);
   }
 
+  /**
+   * Delete all the passengers from a trip
+   * @param trip_id id of the trip
+   * @return ResponseEntity with a http response OK
+   */
   @DeleteMapping("/passengers/{trip_id}")
   public ResponseEntity<Void> deleteAllPassengers(@PathVariable long trip_id){
     boolean response = service.deleteAllPassengersFromTrip(trip_id);
@@ -37,6 +48,11 @@ public class PassengersController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /**
+   * Get All trips where the passenger is in
+   * @param user_id id of the passenger
+   * @return ResponseEntity of a http response OK and with a Custom Object Trips containing 3 lists of passengers by status
+   */
   @GetMapping("/passengers/{user_id}")
   public ResponseEntity<Trips> readPassengerFromTrip(@PathVariable long user_id){
     Trips trips = service.readTripByPassengerId(user_id);
@@ -45,8 +61,14 @@ public class PassengersController {
     return new ResponseEntity<>(trips,HttpStatus.OK);
   }
 
+  /**
+   * Delete All trips where the user is in
+   * @param user_id id of the passenger
+   * @return ResponseEntity of a http response OK
+   */
+
   @DeleteMapping("/passengers/{user_id}")
-  public ResponseEntity<Void> deletePassengerFromTrip(@PathVariable long user_id){
+  public ResponseEntity<Void> deleteAllTripsFromPassengerID(@PathVariable long user_id){
     boolean response = service.deletePassengersFromTrip(user_id);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No user found with this ID");
@@ -54,6 +76,12 @@ public class PassengersController {
 
   }
 
+  /**
+   * Add user as passenger to a trip with pending status
+   * @param user_id id of the user
+   * @param trip_id id of the trip
+   * @return ResponseEntity of a http response OK
+   */
   @PostMapping("/passengers/{trip_id}/{user_id}")
   public ResponseEntity<Void> addPassengerFromTrip(@PathVariable long user_id,@PathVariable long trip_id){
     boolean response = service.addPassengerToTrip(user_id,trip_id);
@@ -62,6 +90,12 @@ public class PassengersController {
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
+  /**
+   * Get the status of the passenger for a certain trip
+   * @param user_id id of the user
+   * @param trip_id id of the trip
+   * @return ResponseEntity of a http response OK and a String with the status
+   */
   @GetMapping("/passengers/{trip_id}/{user_id}")
   public ResponseEntity<String> readPassengerFromTrip(@PathVariable long user_id,@PathVariable long trip_id){
     String status = service.readStatusFromPassenger(user_id,trip_id);
@@ -70,6 +104,13 @@ public class PassengersController {
     return new ResponseEntity<>(status,HttpStatus.OK);
   }
 
+  /**
+   * Update the passenger status to accepted or refused
+   * @param user_id id of the user
+   * @param trip_id id of the trip
+   * @param status Accepted or Refused
+   * @return ResponseEntity of a http response OK
+   */
   @PutMapping("/passengers/{trip_id}/{user_id}")
   public ResponseEntity<Void> updatePassengerStatus(@PathVariable long user_id,@PathVariable long trip_id,@RequestParam String status){
     boolean response = service.updatePassengerStatus(trip_id,user_id,status);
@@ -78,8 +119,15 @@ public class PassengersController {
     return new ResponseEntity<>(HttpStatus.OK);
 
   }
+
+  /**
+   * Remove the user from passenger of a trip
+   * @param user_id id of the user
+   * @param trip_id id of the trip
+   * @return ResponseEntity of a http response OK
+   */
   @DeleteMapping("/passengers/{trip_id}/{user_id}")
-  public ResponseEntity<Void> deletePassengerFromTrip(@PathVariable long user_id,@PathVariable long trip_id){
+  public ResponseEntity<Void> deleteAllTripsFromPassengerID(@PathVariable long user_id,@PathVariable long trip_id){
     boolean response = service.deletePassengerFromTrip(trip_id,user_id);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trip or user not found");
