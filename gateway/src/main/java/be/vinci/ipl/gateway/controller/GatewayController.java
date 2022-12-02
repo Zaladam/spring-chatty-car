@@ -1,8 +1,10 @@
 package be.vinci.ipl.gateway.controller;
 
 import be.vinci.ipl.gateway.models.Credentials;
+import be.vinci.ipl.gateway.models.NewTrip;
 import be.vinci.ipl.gateway.models.NewUser;
 import be.vinci.ipl.gateway.models.Notification;
+import be.vinci.ipl.gateway.models.Trip;
 import be.vinci.ipl.gateway.models.User;
 import be.vinci.ipl.gateway.service.GatewayService;
 import javax.ws.rs.Path;
@@ -99,6 +101,28 @@ public class GatewayController {
     gatewayService.deleteAllNotificationsOfAUser(idUser);
 
   }
+
+  @PostMapping ("/trips")
+  Trip createTrip(@RequestBody NewTrip newTrip, @RequestHeader("Authorization") String token){
+    String userEmail = gatewayService.verify(token);//401
+    //400 souli
+    if (gatewayService.readUserByEmail(userEmail).getIdUser()!=newTrip.getDriverId())
+      throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");//403
+    return gatewayService.createTrip(newTrip);
+  }
+
+  @GetMapping("/trips")
+  Iterable<Trip> getListOfTrips(@RequestParam(name = "departure_date" ,required = false) String departureDate,
+      @RequestParam(name = "originLat", required = false) long originLat,
+      @RequestParam(name = "originLon") long originLon,
+      @RequestParam(name = "destinationLat", required = false ) long destinationLat,
+      @RequestParam(name = "destinationLon" ,required = false ) long destinationLon){
+    //erreur 400
+
+    return gatewayService.getListOfTrips(departureDate, originLat,originLon,destinationLat,destinationLon);
+  }
+
+
 
 
 
