@@ -84,11 +84,11 @@ public class TripController {
   public ResponseEntity<Integer> deleteTripById(@PathVariable int id) {
     Trip trip = service.getTripById(id);
     if(trip == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-    return new ResponseEntity<>(service.deleteTripById(id), HttpStatus.CREATED);
+    return ResponseEntity.status(201).body(service.deleteTripById(id));
   }
 
   @GetMapping("/{driverId}/driver")
-  public List<Trip> getListOfTripOfDriver(@PathVariable int driverId) {
+  public Iterable<Trip> getListOfTripOfDriver(@PathVariable int driverId) {
     return service.getListOfTripUserIsDriver(driverId);
   }
 
