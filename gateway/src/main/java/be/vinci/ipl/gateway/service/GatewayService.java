@@ -29,6 +29,12 @@ public GatewayService(AuthentificationProxy authentificationProxy,
 
   this.tripsProxy = tripsProxy;
 }
+
+  /**
+   * Connects user with credentials
+   * @param credentials The credentials
+   * @return The JWT token, or error 404 if the user in request is not correct
+   */
 public String connect(Credentials credentials){
     return authentificationProxy.connect(credentials);
 }
@@ -39,7 +45,7 @@ public String verify(String token){
 
 public User createUser(NewUser newUser){
   User userCreated = userProxy.createUser(newUser);
-  authentificationProxy.createCredentials(userCreated.getEmail(),newUser.toCredentials());
+  //authentificationProxy.createCredentials(newUser.getEmail(),newUser.toCredentials());
   return userCreated;
 }
 

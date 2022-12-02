@@ -44,7 +44,7 @@ public class GatewayController {
     return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
   }
 
-  @GetMapping("/users") //a verifier
+  @GetMapping("/users")
   @ResponseBody
   User readUserByEmail(@RequestParam(required = true) String email) {
     return gatewayService.readUserByEmail(email);
@@ -68,7 +68,7 @@ public class GatewayController {
   }
 
   @PutMapping("/users/{id}")
-  void updateUser(@PathVariable int id, @RequestBody User user,@RequestHeader("Authorization") String token ){
+  void updateUserInformation(@PathVariable int id, @RequestBody User user,@RequestHeader("Authorization") String token ){
     if(user.getIdUser()!=id)
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     String userEmail = gatewayService.verify(token);
@@ -76,6 +76,8 @@ public class GatewayController {
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");
     gatewayService.updateUser(id,user);
   }
+
+  //deleteUser
 
   //user/{id}/driver
 
