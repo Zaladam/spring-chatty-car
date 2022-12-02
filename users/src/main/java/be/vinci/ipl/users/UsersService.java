@@ -13,12 +13,12 @@ public class UsersService {
     this.repository = repository;
   }
 
-  public boolean createOne(NewUser newUser) {
+  public User createOne(NewUser newUser) {
     if (repository.findByEmail(newUser.getEmail()) != null) {
-      return false;
+      return null;
     }
     repository.save(newUser.toUser());
-    return true;
+    return repository.findByEmail(newUser.getEmail());
   }
 
   public User findByEmail(String email) {

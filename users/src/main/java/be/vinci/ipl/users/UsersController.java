@@ -21,15 +21,15 @@ public class UsersController {
     this.service = service;
   }
 
-  @PostMapping("/users/{email}")
-  public ResponseEntity<Void> createOne(@PathVariable String email,@RequestBody NewUser newUser){
-    if (newUser.getEmail() == null || !newUser.getEmail().equals(email) ||
+  @PostMapping("/users")
+  public ResponseEntity<User> createOne(@RequestBody NewUser newUser){
+    if (newUser.getEmail() == null ||
         newUser.getFirstName() == null || newUser.getLastName() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
-    boolean created = service.createOne(newUser);
-    if (!created) throw new ResponseStatusException(HttpStatus.CONFLICT);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    User user = service.createOne(newUser);
+    if (user == null) throw new ResponseStatusException(HttpStatus.CONFLICT);
+    return new ResponseEntity<User>(user,HttpStatus.CREATED);
   }
 
   @GetMapping("/users/{email}")

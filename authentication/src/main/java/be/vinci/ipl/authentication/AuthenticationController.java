@@ -42,19 +42,19 @@ public class AuthenticationController {
     return email;
   }
 
-  @PostMapping("/auth/{email}")
-  public ResponseEntity<Void> createCredentials(@PathVariable String email,
+  @PostMapping("/auth")
+  public ResponseEntity<Boolean> createCredentials(
       @RequestBody Credentials credentials) {
     if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
         .matcher(credentials.getEmail()).matches()
-        || credentials.getPassword()==null || !email.equals(credentials.getEmail())) {
+        || credentials.getPassword()==null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     boolean created = service.createCredentials(credentials);
     if (!created) {
       throw new ResponseStatusException(HttpStatus.CONFLICT);
     }
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    return new ResponseEntity<Boolean>(true,HttpStatus.CREATED);
   }
 
   @PutMapping("/auth/{email}")

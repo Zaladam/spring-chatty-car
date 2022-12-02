@@ -1,2 +1,13 @@
-### Get list of passengers from a trip
-GET {{url}}/passengers/3
+### Add an user
+POST {{urlUsers}}/users
+Content-Type:application/json
+
+{
+  "email": "gregory.seront@vinci.be",
+  "firstName": "Gregory",
+  "lastName": "Seront",
+  "password": "password123"
+}
+
+### Get an user
+GET {{urlUsers}}/users/1
