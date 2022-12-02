@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "be.vinci.ipl.authentication",
+      "type": "java.lang.String",
+      "description": "Description for bbe.vinci.ipl.authentication."
+    }
+  ] }
