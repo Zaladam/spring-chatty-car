@@ -13,8 +13,8 @@ import lombok.ToString;
 @Embeddable
 public class Position {
 
-  private long longitude;
-  private long latitude;
+  private Long longitude;
+  private Long latitude;
 
   public Position(long latitude, long longitude) {
     this.latitude = latitude;

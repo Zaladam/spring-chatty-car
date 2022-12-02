@@ -26,31 +26,34 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 @Entity(name = "trips")
 public class Trip {
 
-  // Todo Specify json notation
-
   @Id
   @Column(name = "trip_id")
   @JsonProperty("trip_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private int tripId;
+  private Integer tripId;
   @Embedded
   @AttributeOverrides({
       @AttributeOverride(name = "latitude", column = @Column(name = "origin_latitude")),
       @AttributeOverride(name = "longitude", column = @Column(name = "origin_longitude")),
   })
+  @JsonProperty("origin")
   private Position origin;
   @Embedded
   @AttributeOverrides({
       @AttributeOverride(name = "latitude", column = @Column(name = "destination_latitude")),
       @AttributeOverride(name = "longitude", column = @Column(name = "destination_longitude")),
   })
+  @JsonProperty("destination")
   private Position destination;
+
+  @Column(name = "driver_id")
+  @JsonProperty("driver_id")
+  private Integer driverId;
+  @Column(name = "available_seating")
+  @JsonProperty("available_seating")
+  private Integer availableSeating;
   @Column(name = "departure_date")
+  @JsonProperty("departure_date")
   @DateTimeFormat(iso = ISO.DATE)
   private LocalDate departureDate;
-  @Column(name = "driver_id")
-  private int driverId;
-  @Column(name = "available_seating")
-  private int availableSeating;
-
 }
