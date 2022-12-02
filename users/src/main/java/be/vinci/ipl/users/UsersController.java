@@ -24,7 +24,7 @@ public class UsersController {
   @PostMapping("/users")
   public ResponseEntity<User> createOne(@RequestBody NewUser newUser){
     if (newUser.getEmail() == null ||
-        newUser.getFirstName() == null || newUser.getLastName() == null) {
+        newUser.getFirstname() == null || newUser.getLastname() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     }
     User userCreated = service.createOne(newUser);
