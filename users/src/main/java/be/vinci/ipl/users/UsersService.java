@@ -26,26 +26,41 @@ public class UsersService {
     return true;
   }
 
+  /**
+   * Reads a user by his email
+   * @param email email of the user
+   * @return The user found
+   */
   public User findByEmail(String email) {
     return repository.findByEmail(email);
   }
 
+  /**
+   * Reads a user by his id
+   * @param id Pseudo id the user
+   * @return The user found, or null if the user couldn't be found
+   */
   public User findById(int id) {
     return repository.findById(id).orElse(null);
   }
-
+  /**
+   * Updates a user
+   * @param user User to update
+   * @return True if the user could be updated, false if the user couldn't be found
+   */
   public boolean updateOne(User user) {
-    User userFounded = repository.findById(user.getId()).orElse(null);
-    if (userFounded == null) {
+    if (!repository.existsById(user.getId())) {
       return false;
     }
-    userFounded.setEmail(user.getEmail());
-    userFounded.setFirstname(user.getFirstname());
-    userFounded.setLastname(user.getLastname());
-    repository.save(userFounded);
+    repository.save(user);
     return true;
   }
 
+  /**
+   * Deletes a user
+   * @param id id of the user
+   * @return True if the user could be deleted, false if the user couldn't be found
+   */
   public boolean deleteOne(int id) {
     if (!repository.existsById(id)) {
       return false;
