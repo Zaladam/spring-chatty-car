@@ -1,9 +1,5 @@
 package be.vinci.ipl.authentication.model;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +11,14 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "credentials")
-public class Credentials {
-  @Id
+public class InsecureCredentials {
+
   private String email;
-  @Column(name = "hashed_password")
-  private String hashedPassword;
+  private String password;
+
+  public Credentials toCredentials(String hashedPassword){
+    return new Credentials(email, hashedPassword);
+  }
+
+
 }

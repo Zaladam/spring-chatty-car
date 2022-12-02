@@ -21,21 +21,21 @@ public class UsersController {
     this.service = service;
   }
 
-  @PostMapping("/users/{email}")
-  public ResponseEntity<Void> createOne(@PathVariable String email,@RequestBody NewUser newUser){
-    if (newUser.getEmail() == null || !newUser.getEmail().equals(email) ||
+  @PostMapping("/users")
+  public ResponseEntity<User> createOne(@RequestBody NewUser newUser){
+    if (newUser.getEmail() == null ||
         newUser.getFirstName() == null || newUser.getLastName() == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     }
-    boolean created = service.createOne(newUser);
-    if (!created) throw new ResponseStatusException(HttpStatus.CONFLICT);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+    User userCreated = service.createOne(newUser);
+    if (userCreated==null) throw new ResponseStatusException(HttpStatus.CONFLICT,"A user already exists with this email");
+    return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
   }
 
-  @GetMapping("/users/{email}")
+  @GetMapping("/users/{email}") //changer dans le yaml et mettre un path pas une query
   public User readOne(@PathVariable String email) {
     User user = service.findByEmail(email);
-    if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No user found with this email");
     return user;
   }
 
@@ -48,7 +48,8 @@ public class UsersController {
 
   @PutMapping("/users/{id}")
   public ResponseEntity<Void> updateOne(@PathVariable int id,@RequestBody User user){
-    if (user.getEmail() == null  || user.getFirstname() == null || user.getLastname() == null) {
+    if (user.getEmail() == null  || user.getFirstname() == null ||
+        user.getLastname() == null || user.getId()!=id) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     }
     boolean updated = service.updateOne(user);
@@ -57,12 +58,9 @@ public class UsersController {
   }
 
   @DeleteMapping("/users/{id}")
-  public ResponseEntity<Void> deleteOne(@PathVariable int id,@RequestBody User user){
-    if (user.getEmail() == null  || user.getFirstname() == null || user.getLastname() == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    }
-    boolean deleted = service.deleteOne(user.getId());
-    if(!deleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+  public ResponseEntity<Void> deleteOne(@PathVariable int id){
+    boolean deleted = service.deleteOne(id);
+    if(!deleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No user found with this ID");
     return new ResponseEntity<>(HttpStatus.OK);
   }
 

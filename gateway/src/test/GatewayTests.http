@@ -1,8 +1,18 @@
-###Connect user
+### Connect user
 POST http://localhost:8080/auth
 Content-Type: application/json
 
 {
-  "email" : "string",
-  "password": "string"
+  "pseudo": "Seb",
+  "password": "notsaying"
 }
+
+> {% client.global.set("token", response.body) %}
+
+
+###Get user notifications
+GET http://localhost:8080/user/{id}/notifications"
+Authorization: {{token}}
+
+
+

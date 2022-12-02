@@ -1,6 +1,7 @@
 package be.vinci.ipl.authentication;
 
 import be.vinci.ipl.authentication.model.Credentials;
+import be.vinci.ipl.authentication.model.InsecureCredentials;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -20,18 +21,27 @@ public class AuthenticationService {
     this.jwtAlgorithm = Algorithm.HMAC512(properties.getSecret());
     this.jwtVerifier = JWT.require(this.jwtAlgorithm).withIssuer("auth0").build();;
   }
-
-  public String connect(Credentials credentials) {
-    Credentials credentialsFound = repository.findById(credentials.getEmail()).orElse(null);
+  /**
+   * Connects user with credentials
+   * @param insecureCredentials The credentials with insecure password
+   * @return The JWT token, or null if the user couldn't be connected
+   */
+  public String connect(InsecureCredentials insecureCredentials) {
+    Credentials credentialsFound = repository.findById(insecureCredentials.getEmail()).orElse(null);
     if (credentialsFound == null) {
       return null;
     }
-    if (!BCrypt.checkpw(credentials.getPassword(), credentialsFound.getPassword())) {
+    if (!BCrypt.checkpw(insecureCredentials.getPassword(), credentialsFound.getHashedPassword())) {
       return null;
     }
     return JWT.create().withIssuer("auth0").withClaim("email",credentialsFound.getEmail()).sign(jwtAlgorithm);
   }
 
+  /**
+   * Verifies JWT token
+   * @param token The JWT token
+   * @return The email of the user, or null if the token couldn't be verified
+   */
   public String verify(String token){
     try {
       String email = jwtVerifier.verify(token).getClaim("email").asString();
@@ -41,25 +51,37 @@ public class AuthenticationService {
       return null;
     }
   }
-
-  public boolean createCredentials(Credentials credentials){
-    if(repository.existsById(credentials.getEmail())) return false;
-    credentials.setPassword(BCrypt.hashpw(credentials.getPassword(),BCrypt.gensalt()));
-    repository.save(credentials);
+  /**
+   * Creates credentials in repository
+   * @param insecureCredentials The credentials with insecure password
+   * @return True if the credentials were created, or false if they already exist
+   */
+  public boolean createCredentials(InsecureCredentials insecureCredentials){
+    if(repository.existsById(insecureCredentials.getEmail())) return false;
+    String hashedPassword = BCrypt.hashpw(insecureCredentials.getPassword(), BCrypt.gensalt());
+    repository.save(insecureCredentials.toCredentials(hashedPassword));
+    return true;
+  }
+  /**
+   * Updates credentials in repository
+   * @param insecureCredentials The credentials with insecure password
+   * @return True if the credentials were updated, or false if they couldn't be found
+   */
+  public boolean updateCredentials(InsecureCredentials insecureCredentials){
+    if (!repository.existsById(insecureCredentials.getEmail())) return false;
+    String hashedPassword = BCrypt.hashpw(insecureCredentials.getPassword(), BCrypt.gensalt());
+    repository.save(insecureCredentials.toCredentials(hashedPassword));
     return true;
   }
 
-  public boolean updateCredentials(Credentials credentials){
-    Credentials credentialsFounded = repository.findById(credentials.getEmail()).orElse(null);
-    if(credentialsFounded==null) return false;
-    credentialsFounded.setPassword(BCrypt.hashpw(credentials.getPassword(),BCrypt.gensalt()));
-    repository.save(credentialsFounded);
-    return true;
-  }
-
-  public boolean deleteCredentials(Credentials credentials){
-    if(!repository.existsById(credentials.getEmail())) return false;
-    repository.deleteById(credentials.getEmail());
+  /**
+   * Deletes credentials in repository
+   * @param email The email of the user
+   * @return True if the credentials were deleted, or false if they couldn't be found
+   */
+  public boolean deleteCredentials(String email){
+    if(!repository.existsById(email)) return false;
+    repository.deleteById(email);
     return true;
   }
 }
