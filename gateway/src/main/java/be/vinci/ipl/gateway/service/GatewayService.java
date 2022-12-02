@@ -38,7 +38,7 @@ public String verify(String token){
 }
 
 public User createUser(NewUser newUser){
-  User userCreated = userProxy.createUser(newUser.getEmail(),newUser.toUser());
+  User userCreated = userProxy.createUser(newUser);
   authentificationProxy.createCredentials(userCreated.getEmail(),newUser.toCredentials());
   return userCreated;
 }

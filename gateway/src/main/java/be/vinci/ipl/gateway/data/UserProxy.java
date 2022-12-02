@@ -1,5 +1,6 @@
 package be.vinci.ipl.gateway.data;
 
+import be.vinci.ipl.gateway.models.NewUser;
 import be.vinci.ipl.gateway.models.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +13,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Repository
-@FeignClient(name="user")
+@FeignClient(name="users")
 public interface UserProxy {
 
-  @PostMapping("/user/{email}")
-  User createUser(@PathVariable String email, @RequestBody User user);
+  @PostMapping("/users")
+  User createUser(@RequestBody NewUser newUser);
 
   @GetMapping("/users/{email}")
   User readUserByEmail(@PathVariable String email);

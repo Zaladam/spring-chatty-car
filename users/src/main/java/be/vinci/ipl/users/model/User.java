@@ -16,8 +16,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity(name = "users")
 public class User {
-  @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Id
   private int id;
   private String email;
   private String firstname;
