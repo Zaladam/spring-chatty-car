@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -32,8 +33,8 @@ public class UsersController {
     return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
   }
 
-  @GetMapping("/users/{email}") //changer dans le yaml et mettre un path pas une query
-  public User readOne(@PathVariable String email) {
+  @GetMapping("/users")
+  public User readOne(@RequestParam(required = true) String email) {
     User user = service.findByEmail(email);
     if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No user found with this email");
     return user;

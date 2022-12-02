@@ -27,7 +27,25 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/user'
-
+    get:
+      summary: Find user from its email
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema:
+            type: string
+            example: gregory.seront@vinci.be
+          description: Email of the user
+      responses:
+        404:
+          description: No user found with this email
+        200:
+          description: Sent user information
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/user'
   /users/{id}:
     parameters:
       - name: id
@@ -79,27 +97,6 @@ paths:
           description: No user found with this ID
         200:
           description: User is deleted
-
-  /users/{email}:
-    get:
-      summary: Find user from its email
-      parameters:
-        - name: email
-          in: query
-          required: true
-          schema:
-            type: string
-            example: gregory.seront@vinci.be
-          description: Email of the user
-      responses:
-        404:
-          description: No user found with this email
-        200:
-          description: Sent user information
-          content:
-            'application/json':
-              schema:
-                $ref: '#/components/schemas/user'
 components:
   schemas:
     user:
