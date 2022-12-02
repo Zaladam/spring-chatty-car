@@ -7,6 +7,16 @@ Content-Type: application/json
   "password": "password"
 }
 
+
+### auth from gateway
+POST http://localhost:8080/auth
+Content-Type: application/json
+
+{
+  "email":"user.email@validebe",
+  "password": "password"
+}
+
 ### Test creat new credentials with unvalide data
 POST http://localhost:9004/auth/user
 Content-Type: application/json
@@ -28,10 +38,6 @@ Content-Type: application/json
 client.global.set("token", response.body.token);
 %}
 
-<> 2022-12-02T005132.200.txt
-<> 2022-12-02T005014.200.txt
-<> 2022-12-02T004701.200.txt
-
 ###Test connexion with unvalidated credentials
 POST http://localhost:9004/auth/connect
 Content-Type: application/json
@@ -41,10 +47,6 @@ Content-Type: application/json
   "password": "wrongpassword"
 }
 
-<> 2022-12-02T005127.401.json
-
-
-
 ### verify
 POST http://localhost:9004/auth/verify
 Content-Type: application/json
@@ -52,10 +54,6 @@ Content-Type: application/json
 {
   "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJpc3MiOiJhdXRoMCIsImVtYWlsIjoidXNlci5lbWFpbEB2YWxpZGViZSJ9.Fsq33LTsF6kRmdi-dBziWquAVsWN5WTOEP15I8C41xhKqi1kAVkpZ_J0hfwrA7VEZqRwWDpEpSdbI0CW_-sDdw"
 }
-
-
-
-
 
 ### update user's password
 PUT http://localhost:9004/auth/user.email@validebe
@@ -65,4 +63,7 @@ Content-Type: application/json
   "email":"user.email@validebe",
   "password": "password"
 }
+
+###
+DELETE http://localhost:9004/auth/{{email}}
 
