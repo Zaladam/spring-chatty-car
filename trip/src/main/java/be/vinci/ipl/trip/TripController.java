@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,8 @@ public class TripController {
    **/
 //  @GetMapping("/?departure_date&originLat&originLon&destinationLat&destinationLon")
   @GetMapping("/")
-  public List<Trip> getListOfTrips(@QueryParam("departure_date") String departureDate,
+  public ResponseEntity<List<Trip>> getListOfTrips(
+      @QueryParam("departure_date") String departureDate,
       @QueryParam("originLat") Long originLat, @QueryParam("originLon") Long originLon,
       @QueryParam("destinationLat") Long destinationLat,
       @QueryParam("destinationLon") Long destinationLon) {
@@ -55,7 +57,7 @@ public class TripController {
       trips = service.getAllTrips();
     }
 
-    return trips.subList(0, 19);
+    return ResponseEntity.status(200).body(trips.subList(0, 19));
   }
 
   @PostMapping("/")
@@ -65,31 +67,48 @@ public class TripController {
         || trip.getDestination().getLatitude() == null
         || trip.getDestination().getLongitude() == null
         || trip.getDepartureDate() == null || trip.getAvailableSeating() == null
-        || trip.getAvailableSeating() <=0
+        || trip.getAvailableSeating() <= 0
     ) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
-    Trip tripCreated = service.createTrip(trip.toTrip());
-    return new ResponseEntity<>(tripCreated, HttpStatus.CREATED);
+    Trip tripCreated = service.saveTrip(trip.toTrip());
+    return ResponseEntity.status(HttpStatus.CREATED).body(tripCreated);
   }
 
   @GetMapping("/{id}")
-  public Trip getTripById(@PathVariable int id) {
-    Trip trip= service.getTripById(id);
-    if(trip==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-    return service.getTripById(id);
+  public ResponseEntity<Trip> getTripById(@PathVariable int id) {
+    Trip trip = service.getTripById(id);
+    if (trip == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
+    return ResponseEntity.status(200).body(service.getTripById(id));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Integer> deleteTripById(@PathVariable int id) {
     Trip trip = service.getTripById(id);
-    if(trip == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    if (trip == null) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
     return ResponseEntity.status(201).body(service.deleteTripById(id));
   }
 
+  // TODO: 02-12-22
+  @PutMapping("/{id}")
+  public ResponseEntity<Trip> decreaseAvailableSeating(@PathVariable int id) {
+    Trip trip = service.getTripById(id);
+    if (trip == null || trip.getAvailableSeating() == 0) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+    }
+    trip.setAvailableSeating(trip.getAvailableSeating() - 1);
+    service.saveTrip(trip);
+    return ResponseEntity.status(200).body(trip);
+  }
+
   @GetMapping("/{driverId}/driver")
-  public Iterable<Trip> getListOfTripOfDriver(@PathVariable int driverId) {
-    return service.getListOfTripUserIsDriver(driverId);
+  public ResponseEntity<Iterable<Trip>> getListOfTripOfDriver(@PathVariable int driverId) {
+    Iterable<Trip> trips = service.getListOfTripUserIsDriver(driverId);
+    return ResponseEntity.status(200).body(trips);
   }
 
   @DeleteMapping("/{driverId}/driver")

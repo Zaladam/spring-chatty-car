@@ -17,7 +17,7 @@ public class TripService {
     this.repository = repository;
   }
 
-  public Trip createTrip(Trip trip) {
+  public Trip saveTrip(Trip trip) {
     return repository.save(trip);
   }
 
@@ -52,4 +52,7 @@ public class TripService {
   public boolean deleteTripsByDriverId(int driverId) {
     return repository.deleteAllByDriverId(driverId);
   }
+
+
+
 }
