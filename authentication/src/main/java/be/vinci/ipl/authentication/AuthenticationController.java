@@ -19,9 +19,10 @@ public class AuthenticationController {
   @PostMapping("/auth/connect")
   public String connect(@RequestBody Credentials credentials) {
 
-    if (credentials.getEmail()==null
-        || credentials.getPassword()==null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Credentials in request are not correct");
+    if (credentials.getEmail() == null
+        || credentials.getPassword() == null) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Credentials in request are not correct");
     }
     String token = service.connect(credentials);
     if (token == null) {
@@ -42,8 +43,8 @@ public class AuthenticationController {
   @PostMapping("/auth/{email}")
   public ResponseEntity<Void> createCredentials(@PathVariable String email,
       @RequestBody Credentials credentials) {
-    if (credentials.getEmail()==null
-        || credentials.getPassword()==null || !email.equals(credentials.getEmail())) {
+    if (credentials.getEmail() == null
+        || credentials.getPassword() == null || !email.equals(credentials.getEmail())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     boolean created = service.createCredentials(credentials);
@@ -56,10 +57,10 @@ public class AuthenticationController {
   @PutMapping("/auth/{email}")
   public ResponseEntity<Void> updateOne(@PathVariable String email,
       @RequestBody Credentials credentials) {
-    if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
-        .matcher(credentials.getEmail()).matches()
-        || credentials.getPassword()==null || !email.equals(credentials.getEmail())) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Credentials in request are not correct");
+    if (credentials.getEmail() == null
+        || credentials.getPassword() == null || !email.equals(credentials.getEmail())) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Credentials in request are not correct");
     }
     boolean updated = service.updateCredentials(credentials);
     if (!updated) {
@@ -71,13 +72,15 @@ public class AuthenticationController {
   @DeleteMapping("/auth/{email}")
   public ResponseEntity<Void> delete(@PathVariable String email,
       @RequestBody Credentials credentials) {
-    if (credentials.getEmail()==null || !Pattern.compile("^(.+)@(\\\\S+)$")
+    if (credentials.getEmail() == null || !Pattern.compile("^(.+)@(\\\\S+)$")
         .matcher(credentials.getEmail()).matches()
-        || credentials.getPassword()==null || !email.equals(credentials.getEmail())) {
+        || credentials.getPassword() == null || !email.equals(credentials.getEmail())) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
     boolean deleted = service.deleteCredentials(credentials);
-    if(!deleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    if (!deleted) {
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    }
     return new ResponseEntity<>(HttpStatus.OK);
   }
 }
