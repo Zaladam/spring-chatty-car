@@ -111,8 +111,9 @@ public class TripController {
   }
 
   @DeleteMapping("/{driverId}/driver")
-  public boolean deleteTripsByDriverId(@PathVariable int driverId) {
-    return service.deleteTripsByDriverId(driverId);
+  public ResponseEntity<Iterable<Trip>> deleteTripsByDriverId(@PathVariable int driverId) {
+    Iterable<Trip> trips = service.deleteTripsByDriverId(driverId);
+    return ResponseEntity.status(200).body(trips);
   }
 
 }

@@ -25,7 +25,7 @@ public interface TripRepository extends CrudRepository<Trip, Integer> {
 
   Integer deleteByTripId(int id);
 
-  boolean deleteAllByDriverId(int driverId);
+  Iterable<Trip> deleteAllByDriverId(int driverId);
 
   List<Trip> findAllByOriginAndDestination(Position origin, Position destination);
 

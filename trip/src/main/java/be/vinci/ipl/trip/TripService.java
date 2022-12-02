@@ -49,7 +49,7 @@ public class TripService {
     return repository.findAllByDriverId(userId);
   }
 
-  public boolean deleteTripsByDriverId(int driverId) {
+  public Iterable<Trip> deleteTripsByDriverId(int driverId) {
     return repository.deleteAllByDriverId(driverId);
   }
 
