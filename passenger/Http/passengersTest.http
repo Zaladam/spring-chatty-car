@@ -1,5 +1,5 @@
 ### Add an user
-POST {{urlGateway}}/users
+POST {{urlUsers}}/users
 Content-Type:application/json
 
 {
@@ -10,4 +10,4 @@ Content-Type:application/json
 }
 
 ### Get an user
-GET {{urlGateway}}/users/1
+GET {{urlUsers}}/users/1

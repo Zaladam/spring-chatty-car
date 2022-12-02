@@ -32,7 +32,7 @@ public class PassengersService {
     Passengers result = new Passengers();
 
     for(Passenger passenger : passengers) {
-      User user = usersProxy.readOne(passenger.getUserId());
+      User user = usersProxy.readOneById(passenger.getUserId());
       switch (passenger.getStatus()) {
         case "pending" -> result.getPending().add(user);
         case "accepted" -> result.getAccepted().add(user);
@@ -56,7 +56,7 @@ public class PassengersService {
       return null;
     Trips result = new Trips();
     for (Passenger passenger : passengers ) {
-      Trip trip = tripProxy.readOne(passenger.getTripId());
+      Trip trip = tripProxy.getTripById(passenger.getTripId());
       switch (passenger.getStatus()) {
         case "pending" -> result.getPending().add(trip);
         case "accepted" -> result.getAccepted().add(trip);

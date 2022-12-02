@@ -10,5 +10,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "trips")
 public interface TripProxy {
   @GetMapping("/trips/{trip_id}")
-  Trip readOne(@PathVariable int trip_id);
+  Trip getTripById(@PathVariable int trip_id);
 }

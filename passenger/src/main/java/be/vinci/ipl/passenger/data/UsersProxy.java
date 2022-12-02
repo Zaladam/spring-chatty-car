@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface UsersProxy {
 
   @GetMapping("/users/{user_id}")
-  User readOne(@PathVariable int user_id);
+  User readOneById(@PathVariable int user_id);
 }
