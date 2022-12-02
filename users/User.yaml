@@ -46,28 +46,6 @@ paths:
             'application/json':
               schema:
                 $ref: '#/components/schemas/user'
-    put:
-      summary: Update user password
-      security:
-        - authentication:
-            - specific_user
-      requestBody:
-        description: New credentials of the user
-        content:
-          'application/json':
-            schema:
-              $ref: '#/components/schemas/credentials'
-      responses:
-        400:
-          description: Credentials in request are not correct
-        401:
-          description: Missing authentification
-        403:
-          description: Not identified as the corresponding user
-        404:
-          description: No user found with this email
-        200:
-          description: Password is updated
   /users/{id}:
     parameters:
       - name: id
@@ -83,8 +61,6 @@ paths:
         - authentication:
             - any_user
       responses:
-        401:
-          description: Missing authentification
         404:
           description: No user found with this ID
         200:
@@ -107,10 +83,6 @@ paths:
       responses:
         400:
           description: User in request is not correct
-        401:
-          description: Missing authentification
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No user found with this ID
         200:
@@ -121,10 +93,6 @@ paths:
         - authentication:
             - specific_user
       responses:
-        401:
-          description: Missing authentification
-        403:
-          description: Not identified as the corresponding user
         404:
           description: No user found with this ID
         200:
@@ -134,42 +102,32 @@ components:
     user:
       type: object
       properties:
-          id:
-            type: integer
-          email:
-            type: string
-          firstname:
-            type: string
-          lastname:
-            type: string
+        id:
+          type: integer
+        email:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
       example:
-          id: 1
-          email: gregory.seront@vinci.be
-          firstname: Gregory
-          lastname: Seront
+        id: 1
+        email: gregory.seront@vinci.be
+        firstname: Gregory
+        lastname: Seront
     newUser:
-      type: object
-      properties:
-          email:
-            type: string
-          firstname:
-            type: string
-          lastname:
-            type: string
-          password:
-            type: string
-      example:
-          email: gregory.seront@vinci.be
-          firstname: Gregory
-          lastname: Seafront
-          password: password123
-    credentials:
       type: object
       properties:
         email:
           type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
         password:
           type: string
-        example:
-          email: gregory.seront@vinci.be
-          password: password123
+      example:
+        email: gregory.seront@vinci.be
+        firstname: Gregory
+        lastname: Seafront
+        password: password123
