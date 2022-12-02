@@ -1,25 +1,59 @@
-### Create user
-POST http://localhost:9002/users/Cat
+### Create user1
+POST http://localhost:9005/users
 Content-Type: application/json
 
 {
-  "pseudo": "Cat4Life",
-  "firstname": "Catherine",
-  "lastname": "Mireault"
+  "email": "email1@vince.be",
+  "firstname": "firstname1",
+  "lastname": "lastname1",
+  "password": "password1"
 }
 
-### Read user
-GET http://localhost:9002/users/Cat4Life
-
-### Update user
-PUT http://localhost:9002/users/Cat4Life
+### Create user2
+POST http://localhost:9005/users
 Content-Type: application/json
 
 {
-  "pseudo": "Cat4Life",
-  "firstname": "Cat",
-  "lastname": "Life"
+  "email": "email2@vince.be",
+  "firstname": "firstname1",
+  "lastname": "lastname2",
+  "password": "password2"
 }
 
-### Delete user
-DELETE http://localhost:9002/users/Cat4Life
+### Create user3
+POST http://localhost:9005/users
+Content-Type: application/json
+
+{
+  "email": "email3@vince.be",
+  "firstname": "firstname3",
+  "lastname": "lastname3",
+  "password": "password3"
+}
+
+### Get user1 by it's Email
+GET http://localhost:9005/users?email=email2@vinci.be
+
+
+###Get user1
+GET http://localhost:9005/users/1
+
+###Get user2
+GET http://localhost:9005/users/2
+
+###Get user3
+GET http://localhost:9005/users/3
+
+###Update user1 informations
+PUT http://localhost:9005/users/1
+Content-Type: application/json
+
+{
+  "id": 1,
+  "email": "email1@vinci.be",
+  "firstname": "newName",
+  "lastname": "newNeame"
+}
+
+### Delete user1
+DELETE http://localhost:9005/users/1
