@@ -4,7 +4,7 @@ info:
   description: Microservice handling users
   version: 1.0.0
 servers:
-  - url: http://localhost:9004
+  - url: http://localhost:9005
     description: Development server
 paths:
   /users:

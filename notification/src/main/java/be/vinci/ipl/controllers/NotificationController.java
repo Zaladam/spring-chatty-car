@@ -33,9 +33,9 @@ public class NotificationController {
   }
 
   @DeleteMapping("/{userId}")
-  public boolean deleteAll(@PathVariable int userId){
+  public ResponseEntity<Void> deleteAll(@PathVariable int userId){
     notificationService.deleteAllNotificationsOfUser(userId);
-    return true;
+    return new ResponseEntity<>(HttpStatus.OK);
   }
 
   @PostMapping("")

@@ -10,11 +10,8 @@ paths:
   /passengers/{trip_id}:
     get:
       summary: Get list of passengers of a trip, with pending, accepted and refused status
-      security:
-        - authentication:
-            - driver
       parameters:
-        - name: id
+        - name: trip_id
           in: path
           required: true
           schema:
@@ -36,6 +33,75 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/passengers"
+    
+    delete:
+      summary: Delete all passengers from this trip 
+      parameters:
+        - name: trip_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 38
+          description: ID of the trip
+      responses:
+        400:
+          description: Status not in accepted values
+        401:
+          description: Missing authentication
+        403:
+          description: Not identified as the corresponding user
+        404:
+          description: No trip found with this ID
+        200:
+          description: All passengers deleted from this trip
+          
+  /passengers/{user_id}:
+    get:
+      summary: Get list of trips where the user is a passenger with pending, accepted and refused status
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 1
+          description: ID of the user
+      responses:
+        401:
+          description: Missing authentification
+        403:
+          description: Not identified as the corresponding user
+        404:
+          description: No user found with this ID
+        200:
+          description: Sent user passenger trips
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/passenger_trips"
+                
+    delete:
+      summary: Delete all trips from this user 
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema:
+            type: integer
+            example: 38
+          description: ID of the trip
+      responses:
+        400:
+          description: Status not in accepted values
+        401:
+          description: Missing authentication
+        403:
+          description: Not identified as the corresponding user
+        404:
+          description: No user found with this ID
+        200:
+          description: All trips deleted from this user
 
   /passengers/{trip_id}/{user_id}:
     parameters:
@@ -55,9 +121,7 @@ paths:
         description: ID of the user
     post:
       summary: Add user as passenger to a trip with pending status
-      security:
-        - authentication:
-            - passenger
+
       responses:
         400:
           description: User is already a passenger, or the ride has no available seating left
@@ -71,10 +135,7 @@ paths:
           description: User added as pending passenger
     get:
       summary: Get passenger status
-      security:
-        - authentication:
-            - driver
-            - passenger
+
       responses:
         401:
           description: Missing authentication
@@ -95,9 +156,6 @@ paths:
 
     put:
       summary: Update passenger status
-      security:
-        - authentication:
-            - driver
       parameters:
         - name: status
           in: query
@@ -122,9 +180,7 @@ paths:
 
     delete:
       summary: Remove user from passengers of a trip
-      security:
-        - authentication:
-            - passenger
+
       responses:
         400:
           description: User is not a passenger
@@ -138,12 +194,6 @@ paths:
           description: User removed from passenger
 
 components:
-  securitySchemes:
-    authentication:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-
   schemas:
     passengers:
       type: object
@@ -177,3 +227,58 @@ components:
         email: gregory.seront@vinci.be
         firstname: Gregory
         lastname: Seront
+        
+    passenger_trips:
+      type: object
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        accepted:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+        refused:
+          type: array
+          items:
+            $ref: '#/components/schemas/trip'
+            
+    trip:
+      type: object
+      properties:
+        id:
+          type: integer
+        origin:
+          $ref: '#/components/schemas/position'
+        destination:
+          $ref: '#/components/schemas/position'
+        departure:
+          type: string
+          description: Date in ISO 8601, YYYY-MM-DD
+        driver_id:
+          type: integer
+        available_seating:
+          type: integer
+      example:
+        id: 38
+        origin:
+          latitude: 50.849372
+          longitude: 4.451009
+        destination:
+          latitude: 50.849372
+          longitude: 4.451009
+        departure: 2022-10-24 10:45:00
+        driver_id: 12
+        available_seating: 2
+        
+    position:
+      type: object
+      properties:
+        latitude:
+          type: number
+        longitude:
+          type: number
+      example:
+        latitude: 50.849372
+        longitude: 4.451009
