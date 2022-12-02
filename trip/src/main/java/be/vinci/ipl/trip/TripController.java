@@ -93,7 +93,6 @@ public class TripController {
     return ResponseEntity.status(201).body(service.deleteTripById(id));
   }
 
-  // TODO: 02-12-22
   @PutMapping("/{id}")
   public ResponseEntity<Trip> decreaseAvailableSeating(@PathVariable int id) {
     Trip trip = service.getTripById(id);
