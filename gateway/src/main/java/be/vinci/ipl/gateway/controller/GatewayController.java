@@ -68,11 +68,11 @@ public class GatewayController {
   }
 
   @PutMapping("/users/{id}")
-  void updateUserInformation(@PathVariable int id, @RequestBody User user,@RequestHeader("Authorization") String token ){
-    if(user.getIdUser()!=id)
+  void updateUser(@PathVariable int id, @RequestBody User user,@RequestHeader("Authorization") String token ){
+    if(user.getId()!=id)
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     String userEmail = gatewayService.verify(token);
-    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=id)
+    if(gatewayService.readUserByEmail(userEmail).getId()!=id)
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");
     gatewayService.updateUser(id,user);
   }
@@ -84,7 +84,7 @@ public class GatewayController {
   Iterable<Trip> getListOfTripOfDriver(@PathVariable int driverId, @RequestHeader("Authorization") String token ){
     gatewayService.readUserById(driverId);
     String userEmail = gatewayService.verify(token);
-    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=driverId)
+    if(gatewayService.readUserByEmail(userEmail).getId()!=driverId)
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");
     return gatewayService.getListOfTripOfDriver(driverId);
   }
@@ -95,7 +95,7 @@ public class GatewayController {
   Iterable<Trip> getListOfTripsOfPassenger(@PathVariable int idPasserger, @RequestHeader("Authorization") String token){
     gatewayService.readUserById(idPasserger);
     String userEmail = gatewayService.verify(token);
-    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=idPasserger)
+    if(gatewayService.readUserByEmail(userEmail).getId()!=idPasserger)
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");
     return gatewayService.getListOfTripsOfPassenger(idPasserger);
   }
@@ -103,9 +103,9 @@ public class GatewayController {
   @GetMapping("/user/{id}/notifications")
   Iterable<Notification> readAllNotificationsOfAUser(@PathVariable int idUser, @RequestHeader("Authorization") String token){
 
-    gatewayService.readUserById(idUser);
-    String userEmail = gatewayService.verify(token);
-    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=idUser)
+    gatewayService.readUserById(idUser);//404 notfound!!
+    String userEmail = gatewayService.verify(token);//401
+    if(gatewayService.readUserByEmail(userEmail).getId()!=idUser)
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");//403
     return gatewayService.readAllNotificationsOfAUser(idUser);
   }
@@ -114,7 +114,7 @@ public class GatewayController {
   void deleteAllNotificationsOfAUser(@PathVariable int idUser,  @RequestHeader("Authorization") String token){
     gatewayService.readUserById(idUser);//404 notfound!!
     String userEmail = gatewayService.verify(token);//401
-    if(gatewayService.readUserByEmail(userEmail).getIdUser()!=idUser)
+    if(gatewayService.readUserByEmail(userEmail).getId()!=idUser)
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");//403
 
     gatewayService.deleteAllNotificationsOfAUser(idUser);
@@ -125,7 +125,7 @@ public class GatewayController {
   Trip createTrip(@RequestBody NewTrip newTrip, @RequestHeader("Authorization") String token){
     String userEmail = gatewayService.verify(token);//401
     //400 souli
-    if (gatewayService.readUserByEmail(userEmail).getIdUser()!=newTrip.getDriverId())
+    if (gatewayService.readUserByEmail(userEmail).getId()!=newTrip.getDriverId())
       throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Not identified as the corresponding user");//403
     return gatewayService.createTrip(newTrip);
   }

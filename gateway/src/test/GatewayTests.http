@@ -1,31 +1,52 @@
-### Create user
+### Create user1
 POST http://localhost:8080/users
 Content-Type: application/json
 
 {
-  "email": "chp@gma.com",
+  "email": "nada2@gmail.com",
+  "firstname": "nada",
+  "lastname": "nada",
+  "password": "123"
+}
+
+### Create user2
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "chaymae@gmail.com",
   "firstname": "chaymae",
-  "lastname": "Hbat",
-  "password": "notsaying"
+  "lastname": "chaymae",
+  "password": "123"
 }
 
 
 
-### Connect user
+### Connect user1
 POST http://localhost:8080/auth
 Content-Type: application/json
 
 {
-  "pseudo": "Seb",
-  "password": "notsaying"
+  "email": "nada2@gmail.be",
+  "password": "123"
 }
 
 > {% client.global.set("token", response.body) %}
 
+### Connect user2
+POST http://localhost:8080/auth
+Content-Type: application/json
+
+{
+  "email": "chaymae@gmail.be",
+  "password": "123"
+}
+> {% client.global.set("token", response.body) %}
 
 ###Get user notifications
-GET http://localhost:8080/user/{id}/notifications"
+GET http://localhost:8080/user/1/notifications
 Authorization: {{token}}
+
 
 
 
