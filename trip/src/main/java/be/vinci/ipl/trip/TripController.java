@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -40,13 +41,13 @@ public class TripController {
    **/
 //  @GetMapping("/?departure_date&originLat&originLon&destinationLat&destinationLon")
   @GetMapping("/")
+  @ResponseBody
   public ResponseEntity<List<Trip>> getListOfTrips(
       @RequestParam(required = false) String departureDate,
       @RequestParam(required = false) Long originLat,
       @RequestParam(required = false) Long originLon,
       @RequestParam(required = false) Long destinationLat,
       @RequestParam(required = false) Long destinationLon) {
-    LocalDate parsedDepartureDate = LocalDate.parse(departureDate);
     Position origin;
     Position destination;
     List<Trip> trips;
@@ -60,8 +61,10 @@ public class TripController {
     } else {
       destination = null;
     }
-    if (parsedDepartureDate != null) {
+    if (departureDate != null) {
       // select tout les trips qui ont lieu à cette date
+      LocalDate parsedDepartureDate = LocalDate.parse(departureDate);
+
       trips = (List<Trip>) service.getAllByDepartureDate(parsedDepartureDate);
     } else {
       trips = (List<Trip>) service.getAll();
@@ -77,7 +80,8 @@ public class TripController {
       // select tout les trips qui ont la même origin et destination et ne garder que les 20 dont la somme des distances est la plus petite
       trips = trips.stream().sorted((x, y) -> compareDistanceSumm(x, y, origin, destination)).toList();
     }
-    return ResponseEntity.status(200).body(trips.subList(0, 19));
+    if(trips.size()>20) return ResponseEntity.status(200).body(trips.subList(0, 19));
+    return ResponseEntity.status(200).body(trips);
   }
 
   public int compareDistance(Position firstOrigin, Position secundOrigin, Position destination){

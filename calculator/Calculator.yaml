@@ -1,10 +1,29 @@
-swagger: "2.0"
+openapi: 3.0.3
 info:
-  title: Title
-  description: Title
+  title: Chatty Car Ride Sharing Service Calculator API
+  description: API for the Calculator service of Chatty Car, the ride sharing app.
   version: 1.0.0
-host: www
-schemes:
-  - https
+servers:
+  - url: 'http://localhost:9090'
+    description: calculator server
+
 paths:
-  
+  /calculator/{origin}/{destination}:
+    parameters:
+      - name: origin
+        in: path
+        required: true
+        schema:
+          type: object
+          example:
+            origin:
+              latitude: 50.1598
+              longitude: 4.02586
+        description: Position of the trip fetched in database
+    get:
+      summary: calculate the distance between 2 points
+      responses:
+        200:
+          description: sent the distance between 2 points
+        400:
+          description: Bad parameters
