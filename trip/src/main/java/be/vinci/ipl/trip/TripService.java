@@ -4,9 +4,11 @@ import be.vinci.ipl.trip.models.Position;
 import be.vinci.ipl.trip.models.Trip;
 import java.time.LocalDate;
 import java.util.List;
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 public class TripService {
 
   private final TripRepository repository;
@@ -39,7 +41,7 @@ public class TripService {
     return repository.findByTripId(id);
   }
 
-  public boolean deleteTripById(int id) {
+  public Integer deleteTripById(int id) {
     return repository.deleteByTripId(id);
   }
 

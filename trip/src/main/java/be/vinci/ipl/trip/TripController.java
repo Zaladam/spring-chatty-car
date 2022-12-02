@@ -3,7 +3,6 @@ package be.vinci.ipl.trip;
 import be.vinci.ipl.trip.models.NoIdTrip;
 import be.vinci.ipl.trip.models.Position;
 import be.vinci.ipl.trip.models.Trip;
-import feign.Response;
 import java.time.LocalDate;
 import java.util.List;
 import javax.ws.rs.QueryParam;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -83,8 +81,10 @@ public class TripController {
   }
 
   @DeleteMapping("/{id}")
-  public boolean deleteTripById(@PathVariable int id) {
-    return service.deleteTripById(id);
+  public ResponseEntity<Integer> deleteTripById(@PathVariable int id) {
+    Trip trip = service.getTripById(id);
+    if(trip == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(service.deleteTripById(id), HttpStatus.CREATED);
   }
 
   @GetMapping("/{driverId}/driver")

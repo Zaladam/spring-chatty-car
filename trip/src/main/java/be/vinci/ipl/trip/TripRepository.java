@@ -23,7 +23,7 @@ public interface TripRepository extends CrudRepository<Trip, Integer> {
 
   Trip findByTripId(int id);
 
-  boolean deleteByTripId(int id);
+  Integer deleteByTripId(int id);
 
   boolean deleteAllByDriverId(int driverId);
 
