@@ -1,3 +1,16 @@
+### Create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "chay@gmail.com",
+  "firstname": "chaymae",
+  "lastname": "Hbat",
+  "password": "notsaying"
+}
+
+
+
 ### Connect user
 POST http://localhost:8080/auth
 Content-Type: application/json
