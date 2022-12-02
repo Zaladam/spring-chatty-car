@@ -31,7 +31,7 @@ public class PassengersService {
    * @return null if the trip is not found or A custom object Passengers with depending on the status
    *
    */
-  public Passengers findPassengersFromTrip(long id) {
+  public Passengers findPassengersFromTrip(int id) {
     Iterable<Passenger> passengers = repository.findByTripId(id);
     if(passengers == null)
       return null;
@@ -53,7 +53,7 @@ public class PassengersService {
    * @param id id of the trip
    * @return False if the trip is not found or True
    */
-  public boolean deleteAllPassengersFromTrip(long id) {
+  public boolean deleteAllPassengersFromTrip(int id) {
     Iterable<Passenger> passengers = repository.findByTripId(id);
     if(passengers == null)
       return false;
@@ -66,7 +66,7 @@ public class PassengersService {
    * @param id id of the passenger
    * @return Trips or null if the user is not found
    */
-  public Trips readTripByPassengerId(long id) {
+  public Trips readTripByPassengerId(int id) {
     Iterable<Passenger> passengers = repository.findByUserId(id);
     if (passengers == null)
       return null;
@@ -87,7 +87,7 @@ public class PassengersService {
    * @param id of the user
    * @return true if done or false if user not found
    */
-  public boolean deletePassengersFromTrip(long id) {
+  public boolean deletePassengersFromTrip(int id) {
     Iterable<Passenger> passengers = repository.findByUserId(id);
     if(passengers == null)
       return false;
@@ -101,7 +101,7 @@ public class PassengersService {
    * @param tripId id of the trip
    * @return true if done or false if user or trip is not found
    */
-  public boolean addPassengerToTrip(long userId, long tripId) {
+  public boolean addPassengerToTrip(int userId, int tripId) {
     Passenger newPassenger = new Passenger();
     Passenger verification = repository.findByTripIdAndUserId(userId,tripId);
     if(verification==null)
@@ -120,7 +120,7 @@ public class PassengersService {
    * @param tripId id of the trip
    * @return The string of the status or null
    */
-  public String readStatusFromPassenger(long userId, long tripId) {
+  public String readStatusFromPassenger(int userId, int tripId) {
 
     return repository.findByTripIdAndUserId(userId,tripId).getStatus();
   }
@@ -132,7 +132,7 @@ public class PassengersService {
    * @param status status of the passenger
    * @return true if done or false if user or trip is not found
    */
-  public boolean updatePassengerStatus(long tripId, long userId, String status) {
+  public boolean updatePassengerStatus(int tripId, int userId, String status) {
 
     Passenger passenger = repository.findByTripIdAndUserId(tripId,userId);
     if(passenger == null)
@@ -148,7 +148,7 @@ public class PassengersService {
    * @param userId id of the user
    * @return true if done or false if user or trip is not found
    */
-  public boolean deletePassengerFromTrip(long tripId, long userId) {
+  public boolean deletePassengerFromTrip(int tripId, int userId) {
     Passenger passenger = repository.findByTripIdAndUserId(tripId,userId);
     if(passenger == null)
       return false;

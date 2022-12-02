@@ -28,7 +28,7 @@ public class PassengersController {
    * @return ResponseEntity of a http response OK and with a Custom Object Passengers containing 3 lists of passengers by status
    */
   @GetMapping("/passengers/{trip_id}")
-  public ResponseEntity<Passengers> readFromTrip(@PathVariable long trip_id){
+  public ResponseEntity<Passengers> readFromTrip(@PathVariable int trip_id){
     Passengers passengers = service.findPassengersFromTrip(trip_id);
     if(passengers==null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No trip found with this ID");
@@ -41,7 +41,7 @@ public class PassengersController {
    * @return ResponseEntity with a http response OK
    */
   @DeleteMapping("/passengers/{trip_id}")
-  public ResponseEntity<Void> deleteAllPassengers(@PathVariable long trip_id){
+  public ResponseEntity<Void> deleteAllPassengers(@PathVariable int trip_id){
     boolean response = service.deleteAllPassengersFromTrip(trip_id);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No trip found with this ID");
@@ -54,7 +54,7 @@ public class PassengersController {
    * @return ResponseEntity of a http response OK and with a Custom Object Trips containing 3 lists of passengers by status
    */
   @GetMapping("/passengers/{user_id}")
-  public ResponseEntity<Trips> readPassengerFromTrip(@PathVariable long user_id){
+  public ResponseEntity<Trips> readPassengerFromTrip(@PathVariable int user_id){
     Trips trips = service.readTripByPassengerId(user_id);
     if(trips==null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No user found with this ID");
@@ -68,7 +68,7 @@ public class PassengersController {
    */
 
   @DeleteMapping("/passengers/{user_id}")
-  public ResponseEntity<Void> deleteAllTripsFromPassengerID(@PathVariable long user_id){
+  public ResponseEntity<Void> deleteAllTripsFromPassengerID(@PathVariable int user_id){
     boolean response = service.deletePassengersFromTrip(user_id);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"No user found with this ID");
@@ -83,7 +83,7 @@ public class PassengersController {
    * @return ResponseEntity of a http response OK
    */
   @PostMapping("/passengers/{trip_id}/{user_id}")
-  public ResponseEntity<Void> addPassengerFromTrip(@PathVariable long user_id,@PathVariable long trip_id){
+  public ResponseEntity<Void> addPassengerFromTrip(@PathVariable int user_id,@PathVariable int trip_id){
     boolean response = service.addPassengerToTrip(user_id,trip_id);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trip or user not found");
@@ -97,7 +97,7 @@ public class PassengersController {
    * @return ResponseEntity of a http response OK and a String with the status
    */
   @GetMapping("/passengers/{trip_id}/{user_id}")
-  public ResponseEntity<String> readPassengerFromTrip(@PathVariable long user_id,@PathVariable long trip_id){
+  public ResponseEntity<String> readPassengerFromTrip(@PathVariable int user_id,@PathVariable int trip_id){
     String status = service.readStatusFromPassenger(user_id,trip_id);
     if(status == null)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trip or user not found");
@@ -112,7 +112,7 @@ public class PassengersController {
    * @return ResponseEntity of a http response OK
    */
   @PutMapping("/passengers/{trip_id}/{user_id}")
-  public ResponseEntity<Void> updatePassengerStatus(@PathVariable long user_id,@PathVariable long trip_id,@RequestParam String status){
+  public ResponseEntity<Void> updatePassengerStatus(@PathVariable int user_id,@PathVariable int trip_id,@RequestParam String status){
     boolean response = service.updatePassengerStatus(trip_id,user_id,status);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trip or user not found");
@@ -127,7 +127,7 @@ public class PassengersController {
    * @return ResponseEntity of a http response OK
    */
   @DeleteMapping("/passengers/{trip_id}/{user_id}")
-  public ResponseEntity<Void> deleteAllTripsFromPassengerID(@PathVariable long user_id,@PathVariable long trip_id){
+  public ResponseEntity<Void> deleteAllTripsFromPassengerID(@PathVariable int user_id,@PathVariable int trip_id){
     boolean response = service.deletePassengerFromTrip(trip_id,user_id);
     if(!response)
       throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Trip or user not found");

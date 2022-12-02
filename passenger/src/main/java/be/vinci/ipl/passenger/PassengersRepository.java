@@ -8,9 +8,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PassengersRepository extends CrudRepository<Passenger,String> {
 
-  Iterable<Passenger> findByTripId(long id);
+  Iterable<Passenger> findByTripId(int id);
 
-  Iterable<Passenger> findByUserId(long id);
+  Iterable<Passenger> findByUserId(int id);
 
-  Passenger findByTripIdAndUserId(long userId, long tripId);
+  Passenger findByTripIdAndUserId(int userId, int tripId);
 }
