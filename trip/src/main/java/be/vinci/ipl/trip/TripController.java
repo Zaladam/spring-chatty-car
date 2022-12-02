@@ -78,7 +78,7 @@ public class TripController {
   @GetMapping("/{id}")
   public Trip getTripById(@PathVariable int id) {
     Trip trip= service.getTripById(id);
-//    if(trip==null) throw new
+    if(trip==null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     return service.getTripById(id);
   }
 
