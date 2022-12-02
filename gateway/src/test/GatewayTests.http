@@ -1,0 +1,31 @@
+### Create user
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+  "email": "chp@glmal.com",
+  "firstname": "chaymae",
+  "lastname": "Hbat",
+  "password": "notsaying"
+}
+
+
+
+### Connect user
+POST http://localhost:8080/auth
+Content-Type: application/json
+
+{
+  "pseudo": "Seb",
+  "password": "notsaying"
+}
+
+> {% client.global.set("token", response.body) %}
+
+
+###Get user notifications
+GET http://localhost:8080/user/{id}/notifications"
+Authorization: {{token}}
+
+
+

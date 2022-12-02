@@ -1,13 +1,13 @@
-package be.vinci.ipl.passenger;
+package be.vinci.ipl.be.notification;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PassengerApplicationTests {
+class NotificationApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+  @Test
+  void contextLoads() {
+  }
 
 }
