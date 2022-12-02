@@ -39,9 +39,9 @@ public class GatewayController {
   }
 
   @PostMapping("/users")
-  ResponseEntity<Void> createUser(@RequestBody NewUser newUser) {
-    gatewayService.createUser(newUser);
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  ResponseEntity<User> createUser(@RequestBody NewUser newUser) {
+   User userCreated =  gatewayService.createUser(newUser);
+    return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
   }
 
   @GetMapping("/users") //a verifier

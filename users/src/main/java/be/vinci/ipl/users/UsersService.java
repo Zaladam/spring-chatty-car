@@ -22,8 +22,7 @@ public class UsersService {
     if (repository.findByEmail(newUser.getEmail()) != null) {
       return null;
     }
-    repository.save(newUser.toUser());
-    return repository.findByEmail(newUser.getEmail());
+    return repository.save(newUser.toUser());
   }
 
   /**
