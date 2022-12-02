@@ -3,8 +3,6 @@ package be.vinci.ipl.trip;
 import be.vinci.ipl.trip.models.Position;
 import be.vinci.ipl.trip.models.Trip;
 import java.time.LocalDate;
-import java.util.List;
-import net.bytebuddy.asm.Advice.Local;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,14 +10,10 @@ import org.springframework.stereotype.Repository;
 public interface TripRepository extends CrudRepository<Trip, Integer> {
 
 
-  List<Trip> findAllByDepartureDateAndAvailableSeatingGreaterThanOrderByDepartureDate(
-      LocalDate departureDate, int availableSeating);
+  Iterable<Trip> findAllByDepartureDate(LocalDate departureDate);
 
-  List<Trip> findAllByDepartureDate(LocalDate departureDate);
+  Iterable<Trip> findAllByOrigin(Position origin);
 
-  List<Trip> findAllByOrigin(Position origin);
-
-  List<Trip> findAllByDestination(Position destination);
 
   Trip findByTripId(int id);
 
@@ -27,8 +21,14 @@ public interface TripRepository extends CrudRepository<Trip, Integer> {
 
   Iterable<Trip> deleteAllByDriverId(int driverId);
 
-  List<Trip> findAllByOriginAndDestination(Position origin, Position destination);
+  Iterable<Trip> findAllByOriginAndDestination(Position origin, Position destination);
 
- List<Trip> findAllByDriverId(int driverId);
+  Iterable<Trip> findAllByDriverId(int driverId);
+
+  Iterable<Trip> findAllByAvailableSeatingGreaterThanAndDepartureDateEquals(
+      Integer availableSeating,
+      LocalDate departureDate);
+
+  Iterable<Trip> findAllByAvailableSeatingGreaterThan(Integer availableSeating);
 
 }

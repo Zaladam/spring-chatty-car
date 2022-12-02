@@ -5,7 +5,6 @@ import be.vinci.ipl.trip.models.Position;
 import be.vinci.ipl.trip.models.Trip;
 import java.time.LocalDate;
 import java.util.List;
-import javax.ws.rs.QueryParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -41,23 +41,59 @@ public class TripController {
 //  @GetMapping("/?departure_date&originLat&originLon&destinationLat&destinationLon")
   @GetMapping("/")
   public ResponseEntity<List<Trip>> getListOfTrips(
-      @QueryParam("departure_date") String departureDate,
-      @QueryParam("originLat") Long originLat, @QueryParam("originLon") Long originLon,
-      @QueryParam("destinationLat") Long destinationLat,
-      @QueryParam("destinationLon") Long destinationLon) {
-    LocalDate parserDepartureDate = LocalDate.parse(departureDate);
-    Position origin = new Position(originLat, originLon);
-    Position destination = new Position(destinationLat, destinationLon);
+      @RequestParam(required = false) String departureDate,
+      @RequestParam(required = false) Long originLat,
+      @RequestParam(required = false) Long originLon,
+      @RequestParam(required = false) Long destinationLat,
+      @RequestParam(required = false) Long destinationLon) {
+    LocalDate parsedDepartureDate = LocalDate.parse(departureDate);
+    Position origin;
+    Position destination;
     List<Trip> trips;
-    if (originLat != 0 && originLon != 0 && destinationLat != 0 && destinationLon != 0) {
-      trips = service.getAllTripsSameOriginAndSameDestination(origin, destination);
-    } else if (parserDepartureDate != null) {
-      trips = service.getAllTripsSameDepartureDate(parserDepartureDate);
+    if (originLat != null && originLon != null) {
+      origin = new Position(originLat, originLon);
     } else {
-      trips = service.getAllTrips();
+      origin = null;
+    }
+    if (destinationLat != null && destinationLon != null) {
+      destination = new Position(destinationLat, destinationLon);
+    } else {
+      destination = null;
+    }
+    if (parsedDepartureDate != null) {
+      // select tout les trips qui ont lieu à cette date
+      trips = (List<Trip>) service.getAllByDepartureDate(parsedDepartureDate);
+    } else {
+      trips = (List<Trip>) service.getAll();
     }
 
+    if (origin != null && destination == null) {
+      //select tout les trips et garder que les 20 plus proches de l'origine
+      trips = trips.stream().sorted((x, y) -> compareDistance(x.getOrigin(), y.getOrigin(), origin)).toList();
+    } else if (origin == null && destination != null) {
+      // select tout les trips et garder que les 20 plus proches de la destination
+      trips = trips.stream().sorted((x, y) -> compareDistance(x.getDestination(), y.getDestination(), destination)).toList();
+    } else {
+      // select tout les trips qui ont la même origin et destination et ne garder que les 20 dont la somme des distances est la plus petite
+      trips = trips.stream().sorted((x, y) -> compareDistanceSumm(x, y, origin, destination)).toList();
+    }
     return ResponseEntity.status(200).body(trips.subList(0, 19));
+  }
+
+  public int compareDistance(Position firstOrigin, Position secundOrigin, Position destination){
+    double distanceOrigin = calculatorProxy.getDistance(firstOrigin, destination);
+    double distanceDestination = calculatorProxy.getDistance(secundOrigin, destination);
+    return Double.compare(distanceOrigin, distanceDestination);
+  }
+
+  public int compareDistanceSumm(Trip firstTrip, Trip secundTrip, Position origin, Position destination){
+    double firstDistanceOrigin = calculatorProxy.getDistance(firstTrip.getOrigin(), origin);
+    double firstDistanceDestination = calculatorProxy.getDistance(firstTrip.getDestination(), destination);
+    double secundDistanceOrigin = calculatorProxy.getDistance(secundTrip.getOrigin(), origin);
+    double secundDistanceDestination = calculatorProxy.getDistance(secundTrip.getDestination(), destination);
+    double firstDistanceTotale = firstDistanceDestination + firstDistanceOrigin;
+    double secundDistanceTotale = secundDistanceDestination + secundDistanceOrigin;
+    return Double.compare(firstDistanceTotale, secundDistanceTotale);
   }
 
   @PostMapping("/")
