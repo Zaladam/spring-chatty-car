@@ -22,15 +22,14 @@ public class UsersController {
   }
 
   @PostMapping("/users/{email}")
-  public ResponseEntity<Void> createOne(@PathVariable String email,@RequestBody NewUser newUser){
+  public ResponseEntity<User> createOne(@PathVariable String email,@RequestBody NewUser newUser){
     if (newUser.getEmail() == null || !newUser.getEmail().equals(email) ||
         newUser.getFirstName() == null || newUser.getLastName() == null) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
-    boolean created = service.createOne(newUser);
-    if (!created) throw new ResponseStatusException(HttpStatus.CONFLICT);
-    return new ResponseEntity<>(HttpStatus.CREATED);
-    //renvoyer le user crée
+    User userCreated = service.createOne(newUser);
+    if (userCreated==null) throw new ResponseStatusException(HttpStatus.CONFLICT);
+    return ResponseEntity.status(HttpStatus.CREATED).body(userCreated);
   }
 
   @GetMapping("/users/{email}") //changer dans le yaml et mettre un path pas une query

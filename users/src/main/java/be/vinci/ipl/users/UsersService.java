@@ -18,12 +18,11 @@ public class UsersService {
    * @param newUser User to create
    * @return true if the user could be created, false if another user exists with this pseudo
    */
-  public boolean createOne(NewUser newUser) {
+  public User createOne(NewUser newUser) {
     if (repository.findByEmail(newUser.getEmail()) != null) {
-      return false;
+      return null;
     }
-    repository.save(newUser.toUser());
-    return true;
+    return repository.save(newUser.toUser());
   }
 
   /**
