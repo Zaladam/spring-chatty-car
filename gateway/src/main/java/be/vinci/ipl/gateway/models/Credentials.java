@@ -1,9 +1,5 @@
-package be.vinci.ipl.authentication.model;
+package be.vinci.ipl.gateway.models;
 
-
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,10 +11,8 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "credentials")
 public class Credentials {
-  @Id
   private String email;
-  @Column(name = "hashed_password")
-  private String hashedPassword;
+  private String password;
+
 }

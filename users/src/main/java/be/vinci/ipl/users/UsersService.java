@@ -13,6 +13,11 @@ public class UsersService {
     this.repository = repository;
   }
 
+  /**
+   * Creates a user
+   * @param newUser User to create
+   * @return true if the user could be created, false if another user exists with this pseudo
+   */
   public User createOne(NewUser newUser) {
     if (repository.findByEmail(newUser.getEmail()) != null) {
       return null;
@@ -35,8 +40,8 @@ public class UsersService {
       return false;
     }
     userFounded.setEmail(user.getEmail());
-    userFounded.setFirstName(user.getFirstName());
-    userFounded.setLastName(user.getLastName());
+    userFounded.setFirstname(user.getFirstname());
+    userFounded.setLastname(user.getLastname());
     repository.save(userFounded);
     return true;
   }

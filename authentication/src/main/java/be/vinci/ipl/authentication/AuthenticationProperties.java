@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "be.vinci.ipl.authentification")
+@ConfigurationProperties(prefix = "be.vinci.ipl.authentication")
 @Getter
 @Setter
 public class AuthenticationProperties {
