@@ -29,9 +29,7 @@
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     </dependency>
-<<<<<<< HEAD
 
-=======
     <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-openfeign</artifactId>
@@ -52,24 +50,13 @@
       <artifactId>spring-cloud-openfeign-core</artifactId>
       <version>3.1.5</version>
     </dependency>
->>>>>>> b8f5dbeb85db7ac397cf4998c055ce7020b29dcd
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
     </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-<<<<<<< HEAD
-    <dependency>
-      <groupId>org.springframework.cloud</groupId>
-      <artifactId>spring-cloud-openfeign-core</artifactId>
-    </dependency>
-=======
->>>>>>> b8f5dbeb85db7ac397cf4998c055ce7020b29dcd
+
+
   </dependencies>
 
 

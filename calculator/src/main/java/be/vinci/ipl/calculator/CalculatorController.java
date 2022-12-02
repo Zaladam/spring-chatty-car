@@ -1,7 +1,7 @@
 package be.vinci.ipl.calculator;
 
 import be.vinci.ipl.calculator.models.Position;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +23,7 @@ public class CalculatorController {
   @GetMapping("/{origin}/{destination}")
   public ResponseEntity<Double> getDistance(@PathVariable("origin") Position origin,
       @PathVariable("destination") Position destination) {
-    if(origin == null || destination == null) throw new ResponseStatusException(HttpStatusCode.valueOf(400));
+    if(origin == null || destination == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     return ResponseEntity.status(200).body(service.calculateDistance(origin, destination));
   }
 

@@ -12,6 +12,7 @@
         <module name="trip" />
         <module name="passenger" />
         <module name="eurekaServer" />
+        <module name="notifications" />
         <module name="users" />
         <module name="gateway" />
         <module name="authentication" />
