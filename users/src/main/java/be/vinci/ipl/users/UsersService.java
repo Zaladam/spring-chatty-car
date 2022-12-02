@@ -13,6 +13,11 @@ public class UsersService {
     this.repository = repository;
   }
 
+  /**
+   * Creates a user
+   * @param newUser User to create
+   * @return true if the user could be created, false if another user exists with this pseudo
+   */
   public boolean createOne(NewUser newUser) {
     if (repository.findByEmail(newUser.getEmail()) != null) {
       return false;
