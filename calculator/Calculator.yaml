@@ -19,7 +19,17 @@ paths:
             origin:
               latitude: 50.1598
               longitude: 4.02586
-        description: Position of the trip fetched in database
+        description: Position of the origin
+      - name: destination
+        in: path
+        required: true
+        schema:
+          type: object
+          example:
+            origin:
+              latitude: 50.1598
+              longitude: 4.02586
+        description: Position of the destination
     get:
       summary: calculate the distance between 2 points
       responses:

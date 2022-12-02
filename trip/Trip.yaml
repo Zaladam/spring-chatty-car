@@ -118,6 +118,15 @@ paths:
           description: No trip found with this ID
         201:
           description: Trip is deleted
+    put:
+      summary: Decrease number of available seating in trip
+      responses:
+        200:
+          description: Send modified trip
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/trip'
 
   /trip/{driverId}/driver:
     get:
