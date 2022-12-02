@@ -2,6 +2,7 @@ package be.vinci.ipl.authentication.model;
 
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import lombok.AllArgsConstructor;

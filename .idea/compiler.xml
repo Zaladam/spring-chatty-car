@@ -13,6 +13,7 @@
         <module name="passenger" />
         <module name="eurekaServer" />
         <module name="users" />
+        <module name="gateway" />
         <module name="authentication" />
       </profile>
     </annotationProcessing>
@@ -20,6 +21,7 @@
       <module name="authentication" target="17" />
       <module name="calculator" target="17" />
       <module name="eurekaServer" target="17" />
+      <module name="gateway" target="17" />
       <module name="notification" target="17" />
       <module name="notifications" target="17" />
       <module name="passenger" target="17" />
@@ -32,6 +34,7 @@
       <module name="authentication" options="-parameters" />
       <module name="calculator" options="-parameters" />
       <module name="eurekaServer" options="-parameters" />
+      <module name="gateway" options="-parameters" />
       <module name="notification" options="-parameters" />
       <module name="notifications" options="-parameters" />
       <module name="passenger" options="-parameters" />
