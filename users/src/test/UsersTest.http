@@ -1,15 +1,38 @@
-### Create user
-POST http://localhost:9002/users/Cat
+### Create user1
+POST http://localhost:9005/users
 Content-Type: application/json
 
 {
-  "pseudo": "Cat4Life",
-  "firstname": "Catherine",
-  "lastname": "Mireault"
+  "email": "email1@vince.be",
+  "firstname": "firtname1",
+  "lastname": "lastname1",
+  "password": "password1"
 }
 
-### Read user
-GET http://localhost:9002/users/Cat4Life
+### Create user2
+POST http://localhost:9005/users
+Content-Type: application/json
+
+{
+  "email": "email2@vince.be",
+  "firstname": "firstname1",
+  "lastname": "lastname2",
+  "password": "password2"
+}
+
+### Create user3
+POST http://localhost:9005/users
+Content-Type: application/json
+
+{
+  "email": "email3@vince.be",
+  "firstname": "firstname3",
+  "lastname": "lastname3",
+  "password": "password3"
+}
+
+### Get user1 by it's Email
+GET http://localhost:9005/users/email1@vinci.be
 
 ### Update user
 PUT http://localhost:9002/users/Cat4Life
