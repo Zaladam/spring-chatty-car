@@ -2,16 +2,17 @@ package be.vinci.ipl.gateway.service;
 
 import be.vinci.ipl.gateway.data.AuthentificationProxy;
 import be.vinci.ipl.gateway.data.NotificationProxy;
+import be.vinci.ipl.gateway.data.PassengerProxy;
 import be.vinci.ipl.gateway.data.TripsProxy;
 import be.vinci.ipl.gateway.data.UserProxy;
 import be.vinci.ipl.gateway.models.Credentials;
 import be.vinci.ipl.gateway.models.NewTrip;
 import be.vinci.ipl.gateway.models.NewUser;
 import be.vinci.ipl.gateway.models.Notification;
-import be.vinci.ipl.gateway.models.Position;
 import be.vinci.ipl.gateway.models.Trip;
 import be.vinci.ipl.gateway.models.User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import reactor.util.annotation.Nullable;
 
 @Service
@@ -20,14 +21,17 @@ private final AuthentificationProxy authentificationProxy;
 private final UserProxy userProxy;
 private final NotificationProxy notificationProxy;
 private final TripsProxy tripsProxy;
+private final PassengerProxy passengerProxy;
 
 public GatewayService(AuthentificationProxy authentificationProxy,
-    UserProxy userProxy, NotificationProxy notificationProxy, TripsProxy tripsProxy){
+    UserProxy userProxy, NotificationProxy notificationProxy, TripsProxy tripsProxy,
+    PassengerProxy passengerProxy){
   this.authentificationProxy = authentificationProxy;
   this.userProxy = userProxy;
   this.notificationProxy = notificationProxy;
 
   this.tripsProxy = tripsProxy;
+  this.passengerProxy = passengerProxy;
 }
 
   /**
@@ -45,7 +49,7 @@ public String verify(String token){
 
 public User createUser(NewUser newUser){
   User userCreated = userProxy.createUser(newUser);
-  //authentificationProxy.createCredentials(newUser.getEmail(),newUser.toCredentials());
+  authentificationProxy.createCredentials(newUser.getEmail(),newUser.toCredentials());
   return userCreated;
 }
 
@@ -65,6 +69,16 @@ public void updateUser(int id, User user){
   userProxy.updateOneUser(id, user);
 }
 
+
+//delete User
+  public Iterable<Trip> getListOfTripOfDriver(int driverId){
+    return tripsProxy.getListOfTripOfDriver(driverId);
+  }
+
+  public Iterable<Trip> getListOfTripsOfPassenger(int user_id){
+  return passengerProxy.getListOfTripsOfPassenger(user_id);
+  }
+
 public Iterable<Notification> readAllNotificationsOfAUser(int idUser){
   return notificationProxy.readAllNotificationsOfAUser(idUser);
 }
@@ -81,5 +95,9 @@ public Iterable<Trip> getListOfTrips(@Nullable String departureDate, @Nullable l
     long originLon, @Nullable long destinationLat, @Nullable long destinationLon){
   return tripsProxy.getListOfTrips(departureDate,originLat,originLon,destinationLat,destinationLon);
 }
+
+
+
+
 
 }
