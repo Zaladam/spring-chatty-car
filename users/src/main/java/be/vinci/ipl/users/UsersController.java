@@ -32,7 +32,7 @@ public class UsersController {
     return new ResponseEntity<User>(user,HttpStatus.CREATED);
   }
 
-  @GetMapping("/users/{email}")
+  @GetMapping("/users/{email}") //changer dans le yaml et mettre un path pas une query
   public User readOne(@PathVariable String email) {
     User user = service.findByEmail(email);
     if (user == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -48,7 +48,8 @@ public class UsersController {
 
   @PutMapping("/users/{id}")
   public ResponseEntity<Void> updateOne(@PathVariable int id,@RequestBody User user){
-    if (user.getEmail() == null  || user.getFirstname() == null || user.getLastname() == null) {
+    if (user.getEmail() == null  || user.getFirstname() == null ||
+        user.getLastname() == null || user.getId()!=id) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User in request is not correct");
     }
     boolean updated = service.updateOne(user);
@@ -57,11 +58,8 @@ public class UsersController {
   }
 
   @DeleteMapping("/users/{id}")
-  public ResponseEntity<Void> deleteOne(@PathVariable int id,@RequestBody User user){
-    if (user.getEmail() == null  || user.getFirstname() == null || user.getLastname() == null) {
-      throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
-    }
-    boolean deleted = service.deleteOne(user.getId());
+  public ResponseEntity<Void> deleteOne(@PathVariable int id){
+    boolean deleted = service.deleteOne(id);
     if(!deleted) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     return new ResponseEntity<>(HttpStatus.OK);
   }
